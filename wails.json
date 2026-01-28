@@ -1,0 +1,56 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "YouTrack Helper",
+  "type": "desktop",
+  "outputfilename": "youtrack-helper",
+  "frontend": "frontend",
+  "build": {
+    "appType": "desktop",
+    "obfuscated": false,
+    "nsis": {
+      "onlyOnTarget": false,
+      "include": "build/nsis/installer.nsi",
+      "variables": {}
+    }
+  },
+  "runner": "webview2",
+  "debounceMS": 10,
+  "desktopConfig": {
+    "WindowStartState": "normal",
+    "CSSDragProperty": "--wails-draggable",
+    "CSSDragValue": "drag",
+    "UnifiedWindowsAndMacTitleAndBorders": false,
+    "Windows": {
+      "WebviewIsTransparent": false,
+      "WindowIsTranslucent": false,
+      "BackdropType": 1
+    },
+    "Mac": {
+      "TitleBar": {
+        "TitlebarAppearsTransparent": true,
+        "HideTitle": false,
+        "HideTitleBar": false,
+        "FullScreen": false,
+        "UseProxyTitle": false,
+        "ProxyTitle": ""
+      },
+      "Appearance": "dark",
+      "WebviewIsTransparent": true,
+      "WindowIsTranslucent": true,
+      "About": {
+        "Title": "YouTrack Helper",
+        "Message": "A Spotlight-like launcher for YouTrack tickets",
+        "Icon": "build/appicon.png"
+      }
+    },
+    "Linux": {
+      "Icon": "build/appicon.png",
+      "WindowIsTranslucent": false,
+      "WebviewGpuPolicy": "always"
+    }
+  },
+  "appicon": "build/appicon.png",
+  "iconSrcDir": "",
+  "iconDarkSrcDir": "",
+  "compileNSIS": false
+}
