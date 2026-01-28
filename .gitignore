@@ -1,0 +1,41 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+node_modules/
+
+# Go mod files
+go.sum
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+build/
+dist/
+.wails/
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# App config
+.config/youtrack-helper/
+.token
