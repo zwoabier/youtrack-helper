@@ -1,154 +1,248 @@
-name: Build Cross-Platform Releases
+name: Build & Release
 
 on:
   push:
     tags:
       - 'v*'
+    branches:
+      - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build-macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev build-essential pkg-config npm
-          npm install -g npm@latest
-      - uses: nodejs/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
+      
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm install
-          npm run build
-          cd ..
-      - name: Build Linux (AppImage)
-        run: |
-          wails build -platform linux/amd64 -o youtrack-helper
-      - name: Install AppImage tools
-        run: |
-          sudo apt-get install -y appimage-builder
-      - name: Create AppImage
-        run: |
-          mkdir -p AppImage/usr/bin AppImage/usr/share/applications AppImage/usr/share/icons
-          cp build/bin/youtrack-helper AppImage/usr/bin/
-          cp build/appicon.png AppImage/usr/share/icons/youtrack-helper.png
-          cat > AppImage/usr/share/applications/youtrack-helper.desktop << 'EOF'
-          [Desktop Entry]
-          Name=YouTrack Helper
-          Exec=youtrack-helper
-          Icon=youtrack-helper
-          Type=Application
-          EOF
-          cat > AppImage/AppRun << 'EOF'
-          #!/bin/bash
-          exec "$(dirname "$0")/usr/bin/youtrack-helper" "$@"
-          EOF
-          chmod +x AppImage/AppRun
-          linuxdeploy-x86_64.AppImage --appdir=AppImage -e AppImage/usr/bin/youtrack-helper -i AppImage/usr/share/icons/youtrack-helper.png -d AppImage/usr/share/applications/youtrack-helper.desktop --output=appimage
-      - name: Upload Linux Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: linux-artifacts
-          path: |
-            youtrack-helper*.AppImage
-            build/bin/youtrack-helper
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            youtrack-helper*.AppImage
-            build/bin/youtrack-helper
+      
+      - name: Install Node dependencies
+        run: npm ci
+      
+      - name: Build for macOS ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOS: darwin
+          GOARCH: ${{ matrix.arch }}
+        run: wails build -o youtrack-helper -platform darwin/${{ matrix.arch }}
+      
+      - name: Create DMG
+        run: |
+          mkdir -p dist
+          hdiutil create -volname "YouTrack Helper" -srcfolder build/bin -ov -format UDZO dist/youtrack-helper-macos-${{ matrix.arch }}.dmg
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtrack-helper-macos-${{ matrix.arch }}
+          path: build/bin/YouTrack Helper.app
 
   build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-      - uses: nodejs/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
+      
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm install
-          npm run build
-          cd ..
-      - name: Build Windows
-        run: |
-          wails build -platform windows/amd64 -o youtrack-helper.exe
-        shell: powershell
-      - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: windows-artifacts
-          path: build/bin/youtrack-helper.exe
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: build/bin/youtrack-helper.exe
+      
+      - name: Install Node dependencies
+        run: npm ci
+      
+      - name: Build for Windows
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOS: windows
+          GOARCH: amd64
+        run: wails build -o youtrack-helper.exe -platform windows/amd64
+      
+      - name: Create Installer (NSIS)
+        uses: joncloud/makensis-action@v4
+        with:
+          script-file: installer.nsi
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtrack-helper-windows-x64
+          path: |
+            build/bin/youtrack-helper.exe
+            dist/*.exe
 
-  build-macos:
-    runs-on: macos-latest
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-      - uses: nodejs/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
+      
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build Frontend
+      
+      - name: Install Linux dependencies
         run: |
-          cd frontend
-          npm install
-          npm run build
-          cd ..
-      - name: Build macOS Universal
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libwebkit2gtk-4.0-dev \
+            libappindicator3-dev \
+            libssl-dev \
+            pkg-config \
+            fuse libfuse-dev \
+            squashfs-tools
+      
+      - name: Install Node dependencies
+        run: npm ci
+      
+      - name: Build for Linux
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: wails build -o youtrack-helper -platform linux/amd64
+      
+      - name: Build AppImage
         run: |
-          wails build -platform darwin/universal -o youtrack-helper
-      - name: Create macOS DMG
+          mkdir -p dist
+          # Create AppImage structure
+          mkdir -p AppDir/usr/bin
+          mkdir -p AppDir/usr/share/applications
+          mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
+          
+          cp build/bin/youtrack-helper AppDir/usr/bin/
+          cp build/bin/youtrack-helper AppDir/youtrack-helper
+          cp resources/icon.png AppDir/usr/share/icons/hicolor/512x512/apps/youtrack-helper.png
+          cp resources/icon.png AppDir/.DirIcon
+          
+          # Create desktop file
+          cat > AppDir/usr/share/applications/youtrack-helper.desktop << 'EOF'
+          [Desktop Entry]
+          Type=Application
+          Name=YouTrack Helper
+          Comment=Spotlight-like launcher for YouTrack tickets
+          Exec=youtrack-helper
+          Icon=youtrack-helper
+          Categories=Development;Utility;
+          Terminal=false
+          EOF
+          
+          cp AppDir/usr/share/applications/youtrack-helper.desktop AppDir/
+          
+          # Download and run appimagetool
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+          ./appimagetool-x86_64.AppImage AppDir dist/youtrack-helper-linux-x64.AppImage
+      
+      - name: Build Flatpak
         run: |
-          mkdir -p "YouTrack Helper"
-          cp -r "build/bin/YouTrack Helper.app" "YouTrack Helper/"
-          ln -s /Applications "YouTrack Helper/Applications"
-          hdiutil create -volname "YouTrack Helper" -srcfolder "YouTrack Helper" -ov -format UDZO youtrack-helper.dmg
-      - name: Sign macOS App (Optional)
-        if: secrets.MACOS_SIGN_CERT != null
-        run: |
-          echo "Signing would happen here with proper certificates"
-      - name: Upload macOS Artifacts
-        uses: actions/upload-artifact@v3
+          sudo apt-get install -y flatpak flatpak-builder
+          
+          # Create flatpak manifest
+          mkdir -p flatpak
+          cat > flatpak/com.youtrack.Helper.json << 'EOF'
+          {
+            "app-id": "com.youtrack.Helper",
+            "runtime": "org.freedesktop.Platform",
+            "runtime-version": "23.08",
+            "sdk": "org.freedesktop.Sdk",
+            "command": "youtrack-helper",
+            "finish-args": [
+              "--share=network",
+              "--share=ipc",
+              "--socket=wayland",
+              "--socket=fallback-x11",
+              "--device=dri"
+            ],
+            "modules": [
+              {
+                "name": "youtrack-helper",
+                "buildsystem": "simple",
+                "build-commands": [
+                  "install -Dm755 youtrack-helper /app/bin/youtrack-helper",
+                  "install -Dm644 com.youtrack.Helper.desktop /app/share/applications/com.youtrack.Helper.desktop",
+                  "install -Dm644 icon.png /app/share/icons/hicolor/512x512/apps/com.youtrack.Helper.png"
+                ],
+                "sources": [
+                  {
+                    "type": "file",
+                    "path": "build/bin/youtrack-helper",
+                    "dest": "."
+                  },
+                  {
+                    "type": "file",
+                    "path": "resources/youtrack-helper.desktop",
+                    "dest": "."
+                  },
+                  {
+                    "type": "file",
+                    "path": "resources/icon.png",
+                    "dest": "."
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+          
+          flatpak-builder --user --install dist/youtrack-helper-flatpak flatpak/com.youtrack.Helper.json
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: macos-artifacts
+          name: youtrack-helper-linux
           path: |
-            youtrack-helper.dmg
-            build/bin/YouTrack Helper.app
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
+            build/bin/youtrack-helper
+            dist/*.AppImage
+
+  create-release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+      
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            youtrack-helper.dmg
+          files: release-artifacts/**/*
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
