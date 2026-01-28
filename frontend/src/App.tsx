@@ -1,38 +1,57 @@
-import { useEffect, useState } from 'react'
-import { SetupWizard } from './components/SetupWizard'
-import { SearchInterface } from './components/SearchInterface'
-import * as App from '../wailsjs/go/app/App'
+import { useEffect, useState } from 'react';
+import { SetupWizard } from './components/SetupWizard';
+import { SearchInterface } from './components/SearchInterface';
+import type { Config } from './types';
 
-export default function AppComponent() {
-  const [isConfigured, setIsConfigured] = useState(false)
-  const [loading, setLoading] = useState(true)
+export function App() {
+  const [isConfigured, setIsConfigured] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [config, setConfig] = useState<Config | null>(null);
 
   useEffect(() => {
-    checkConfiguration()
-  }, [])
+    checkConfiguration();
+  }, []);
 
-  const checkConfiguration = async () => {
+  async function checkConfiguration() {
     try {
-      const status = await App.GetConfigStatus()
-      setIsConfigured(status.status === 'ready')
+      const result = await window.go.main.App.IsConfigured();
+      if (result) {
+        const cfg = await window.go.main.App.GetConfig();
+        setConfig(cfg);
+        setIsConfigured(true);
+      }
     } catch (error) {
-      console.error('Failed to check config:', error)
+      console.error('Failed to check configuration:', error);
     } finally {
-      setLoading(false)
+      setIsLoading(false);
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-slate-950">
-        <div className="text-white">Loading...</div>
-      </div>
-    )
+  async function handleSetupComplete(newConfig: Config) {
+    try {
+      await window.go.main.App.SaveConfig(newConfig);
+      setConfig(newConfig);
+      setIsConfigured(true);
+    } catch (error) {
+      console.error('Failed to save config:', error);
+    }
   }
 
-  return isConfigured ? (
-    <SearchInterface onReconfigure={() => setIsConfigured(false)} />
-  ) : (
-    <SetupWizard onComplete={() => setIsConfigured(true)} />
-  )
+  if (isLoading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {!isConfigured ? (
+        <SetupWizard onComplete={handleSetupComplete} />
+      ) : (
+        <SearchInterface config={config!} />
+      )}
+    </>
+  );
 }
