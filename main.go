@@ -1,3 +1,34 @@
 package main
 
-import (\n\t\"context\"\n\t\"embed\"\n\t\"log\"\n\n\t\"github.com/wailsapp/wails/v2\"\n\t\"github.com/wailsapp/wails/v2/pkg/options\"\n\t\"github.com/wailsapp/wails/v2/pkg/options/assetserver\"\n)\n\n//go:embed all:frontend/dist\nvar assets embed.FS\n\nfunc main() {\n\t// Create an instance of the app structure\n\tapp := NewApp()\n\tcm := NewConfigManager()\n\tyt := NewYouTrackAPI(cm)\n\n\t// Create application with options\n\terr := wails.Run(&options.App{\n\t\tTitle:  \"YouTrack Helper\",\n\t\tWidth:  600,\n\t\tHeight: 700,\n\t\tAssetServer: &assetserver.Options{\n\t\t\tFS: assets,\n\t\t},\n\t\tBackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},\n\t\tOnStartup: func(ctx context.Context) {\n\t\t\tapp.startup(ctx, cm, yt)\n\t\t},\n\t\tBinds: []interface{}{\n\t\t\tapp,\n\t\t\tcm,\n\t\t\tyt,\n\t\t},\n\t})\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n
+import (
+	"embed"
+
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+)
+
+//go:embed all:frontend/dist
+var assets embed.FS
+
+func main() {
+	// Create application with options
+	app := NewApp()
+
+	err := wails.Run(&options.App{
+		Title:  "YouTrack Spotlight Search",
+		Assets: &assetserver.Options{
+			Handler: assets,
+		},
+		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		OnStartup:        app.startup,
+		Bind: []interface{}{
+			app,
+		},
+		WindowStartState: options.Normal,
+		Frameless:        true,
+	})
+
+	if err != nil {
+		println("Error:", err.Error())
+	}
+}
