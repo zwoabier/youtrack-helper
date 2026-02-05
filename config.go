@@ -1,1 +1,94 @@
-package main\n\nimport (\n\t\"encoding/json\"\n\t\"os\"\n\t\"path/filepath\"\n\n\t\"github.com/zalando/go-keyring\"\n)\n\ntype Config struct {\n\tBaseURL      string   `json:\"base_url\"`\n\tProjects     []string `json:\"projects\"`\n\tWindowPos    string   `json:\"window_pos\"` // e.g. \"top-right\"\n\tLastSyncTime int64    `json:\"last_sync_time\"`\n}\n\ntype ConfigManager struct {\n\tconfigPath string\n\tconfig     Config\n}\n\nfunc NewConfigManager() *ConfigManager {\n\tcm := &ConfigManager{}\n\tcm.initConfigPath()\n\tcm.loadConfig()\n\treturn cm\n}\n\nfunc (cm *ConfigManager) initConfigPath() error {\n\tuserHome, err := os.UserHomeDir()\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tconfigDir := filepath.Join(userHome, \".youtrack-helper\")\n\tif err := os.MkdirAll(configDir, 0700); err != nil {\n\t\treturn err\n\t}\n\n\tcm.configPath = filepath.Join(configDir, \"config.json\")\n\treturn nil\n}\n\nfunc (cm *ConfigManager) loadConfig() error {\n\tif _, err := os.Stat(cm.configPath); os.IsNotExist(err) {\n\t\tcm.config = Config{}\n\t\treturn nil\n\t}\n\n\tdata, err := os.ReadFile(cm.configPath)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif err := json.Unmarshal(data, &cm.config); err != nil {\n\t\treturn err\n\t}\n\n\treturn nil\n}\n\nfunc (cm *ConfigManager) SaveConfig(cfg Config) error {\n\tcm.config = cfg\n\n\tdata, err := json.MarshalIndent(cfg, \"\", \"  \")\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn os.WriteFile(cm.configPath, data, 0600)\n}\n\nfunc (cm *ConfigManager) GetConfig() Config {\n\treturn cm.config\n}\n\nfunc (cm *ConfigManager) IsConfigured() bool {\n\treturn cm.config.BaseURL != \"\" && len(cm.config.Projects) > 0 && cm.getToken() != \"\"\n}\n\nfunc (cm *ConfigManager) SaveToken(token string) error {\n\treturn keyring.Set(\"youtrack-helper\", \"api-token\", token)\n}\n\nfunc (cm *ConfigManager) getToken() string {\n\ttoken, err := keyring.Get(\"youtrack-helper\", \"api-token\")\n\tif err != nil {\n\t\treturn \"\"\n\t}\n\treturn token\n}\n\nfunc (cm *ConfigManager) GetToken() string {\n\treturn cm.getToken()\n}\n
+package main
+
+import (
+	"encoding/json"
+	"github.com/zwoabier/youtrack-helper/internal/logger"
+	"os"
+	"path/filepath"
+
+	"github.com/zalando/go-keyring"
+)
+
+type ConfigManager struct {
+	configPath string
+	config     Config
+}
+
+func NewConfigManager() *ConfigManager {
+	cm := &ConfigManager{}
+	cm.initConfigPath()
+	cm.loadConfig()
+	return cm
+}
+
+func (cm *ConfigManager) initConfigPath() error {
+	userHome, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	configDir := filepath.Join(userHome, ".youtrack-helper")
+	if err := os.MkdirAll(configDir, 0700); err != nil {
+		return err
+	}
+
+	cm.configPath = filepath.Join(configDir, "config.json")
+	return nil
+}
+
+func (cm *ConfigManager) loadConfig() error {
+	if _, err := os.Stat(cm.configPath); os.IsNotExist(err) {
+		cm.config = Config{LogLevel: "debug"}
+		return nil
+	}
+
+	data, err := os.ReadFile(cm.configPath)
+	if err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &cm.config); err != nil {
+		return err
+	}
+
+	// Log loaded config (without sensitive data)
+	logger.Debug("Config loaded from %s; baseURL empty=%v, projects=%d, log_level=%s, log_to_file=%v",
+		cm.configPath, cm.config.BaseURL == "", len(cm.config.Projects), cm.config.LogLevel, cm.config.LogToFile)
+
+	return nil
+}
+
+func (cm *ConfigManager) SaveConfig(cfg Config) error {
+	cm.config = cfg
+
+	data, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(cm.configPath, data, 0600)
+}
+
+func (cm *ConfigManager) GetConfig() Config {
+	return cm.config
+}
+
+func (cm *ConfigManager) IsConfigured() bool {
+	return cm.config.BaseURL != "" && len(cm.config.Projects) > 0 && cm.getToken() != ""
+}
+
+func (cm *ConfigManager) SaveToken(token string) error {
+	return keyring.Set("youtrack-spotlight", "token", token)
+}
+
+func (cm *ConfigManager) getToken() string {
+	token, err := keyring.Get("youtrack-spotlight", "token")
+	if err != nil {
+		return ""
+	}
+	return token
+}
+
+func (cm *ConfigManager) GetToken() string {
+	return cm.getToken()
+}

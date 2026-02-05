@@ -5,42 +5,53 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
-	"net/http"
 	"os"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
-	"github.com/zalando/go-keyring"
+	"github.com/zwoabier/youtrack-helper/internal/logger"
 )
 
+// #region debug instrumentation
+const debugLogPath = "/home/menzelm/Projects/youtrack-helper/.cursor/debug.log"
+
+func writeDebugND(location, message string, data map[string]interface{}, hypothesisId string) {
+	payload := map[string]interface{}{
+		"sessionId":    "debug-session",
+		"runId":        "run1",
+		"hypothesisId": hypothesisId,
+		"location":     location,
+		"message":      message,
+		"data":         data,
+		"timestamp":    time.Now().UnixMilli(),
+	}
+	b, _ := json.Marshal(payload)
+	f, err := os.OpenFile(debugLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	if err != nil {
+		return
+	}
+	f.Write(b)
+	f.Write([]byte("\n"))
+	f.Close()
+}
+
+// #endregion
 // WailsApp struct
 type App struct {
-	ctx    context.Context
-	config Config	
+	ctx     context.Context
+	config  Config
 	tickets []Ticket
+	cm      *ConfigManager
+	ytAPI   *YouTrackAPI
 }
 
-// Config struct for application configuration
-type Config struct {
-	BaseURL      string   `json:"base_url"`
-	Projects     []string `json:"projects"`
-	WindowPos    string   `json:"window_pos"` // e.g., "top-right"
-	LastSyncTime int64    `json:"last_sync_time"`
-}
-
-// Ticket struct for YouTrack tickets
-type Ticket struct {
-	ID       string   `json:"id"`       // idReadable (AGV-10)
-	Summary  string   `json:"summary"`
-	Type     string   `json:"type"`     // Parsed from customFields
-	Priority string   `json:"priority"` // Parsed from customFields
-	Sprints  []string `json:"sprints"`  // Parsed from customFields
-	Url      string   `json:"url"`      // Computed or fetched
-}
-
-// NewApp creates a new App application structunc NewApp() *App {
-	return &App{}
+// NewApp creates a new App application struct
+func NewApp() *App {
+	cm := NewConfigManager()
+	return &App{
+		cm:    cm,
+		ytAPI: NewYouTrackAPI(cm),
+	}
 }
 
 // startup is called when the app starts. The context is saved
@@ -48,38 +59,46 @@ type Ticket struct {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 
-	// Load config from file
-	if err := a.loadConfig(); err != nil {
-		log.Printf("Error loading config: %v", err)
-		// If config not found or error, initialize with default values
-		a.config = Config{}
+	// Use config from ConfigManager (same source YouTrackAPI uses)
+	a.config = a.cm.GetConfig()
+
+	// Logger: config first, then env overrides level
+	level := a.config.LogLevel
+	if level == "" {
+		level = "debug"
+	}
+	logger.SetLevel(level)
+	logger.SetLogToFile(a.config.LogToFile)
+	if env := os.Getenv("YOUTRACK_HELPER_LOG"); env != "" {
+		logger.SetLevel(env)
 	}
 
 	// Try to load tickets from cache
 	if err := a.loadTicketsFromCache(); err != nil {
-		log.Printf("Error loading tickets from cache: %v", err)
+		logger.Warn("loading tickets from cache: %v", err)
+	} else {
+		logger.Debug("loaded %d cached tickets", len(a.tickets))
 	}
 
-	// Start background sync
-	go a.startBackgroundSync()
-}
+	// Debug log: startup config state (H1)
+	writeDebugND("app.go:startup", "startup_config", map[string]interface{}{
+		"isConfigured":       a.cm.IsConfigured(),
+		"configProjectsLen":  len(a.config.Projects),
+		"hasToken":           a.cm.GetToken() != "",
+		"configBaseURLEmpty": a.config.BaseURL == "",
+	}, "H1")
 
-// loadConfig loads the configuration from config.json
-func (a *App) loadConfig() error {
-	data, err := ioutil.ReadFile("config.json")
-	if err != nil {
-		return fmt.Errorf("failed to read config.json: %w", err)
+	// Start background sync only if configured
+	if a.cm.IsConfigured() {
+		go a.startBackgroundSync()
+	} else {
+		logger.Info("Background sync skipped: configuration not complete")
 	}
-	return json.Unmarshal(data, &a.config)
 }
 
-// saveConfig saves the current configuration to config.json
+// saveConfig saves the current configuration via ConfigManager
 func (a *App) saveConfig() error {
-	data, err := json.MarshalIndent(a.config, "", "  ")
-	if err != nil {
-		return fmt.Errorf("failed to marshal config: %w", err)
-	}
-	return ioutil.WriteFile("config.json", data, 0644)
+	return a.cm.SaveConfig(a.config)
 }
 
 // loadTicketsFromCache loads tickets from a local cache file
@@ -107,7 +126,7 @@ func (a *App) startBackgroundSync() {
 	time.Sleep(5 * time.Second) // Simulate some delay
 	_, err := a.SyncTickets()
 	if err != nil {
-		log.Printf("Initial background sync failed: %v", err)
+		logger.Error("initial background sync failed: %v", err)
 	}
 }
 
@@ -119,32 +138,79 @@ func (a *App) GetConfig() Config {
 // SaveConfig saves the provided configuration
 func (a *App) SaveConfig(c Config) error {
 	a.config = c
-	return a.saveConfig()
+	level := c.LogLevel
+	if level == "" {
+		level = "info"
+	}
+	logger.SetLevel(level)
+	logger.SetLogToFile(c.LogToFile)
+	return a.cm.SaveConfig(c)
 }
 
 // GetTickets returns cached tickets instantly
 func (a *App) GetTickets() []Ticket {
+	// Debug: publish ticket count and sample
+	func() {
+		sample := []string{}
+		for i, t := range a.tickets {
+			if i >= 5 {
+				break
+			}
+			sample = append(sample, t.ID)
+		}
+		payload := map[string]interface{}{
+			"sessionId":    "debug-session",
+			"runId":        "run1",
+			"hypothesisId": "H4",
+			"location":     "app.go:GetTickets",
+			"message":      "get_tickets_called",
+			"data": map[string]interface{}{
+				"count":  len(a.tickets),
+				"sample": sample,
+			},
+			"timestamp": time.Now().UnixMilli(),
+		}
+		b, _ := json.Marshal(payload)
+		f, _ := os.OpenFile(debugLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+		if f != nil {
+			f.Write(b)
+			f.Write([]byte("\n"))
+			f.Close()
+		}
+	}()
+
 	return a.tickets
+}
+
+// FrontendLog allows the frontend to write a debug entry to the NDJSON debug log.
+func (a *App) FrontendLog(message string, data map[string]interface{}) {
+	payload := map[string]interface{}{
+		"sessionId": "debug-session",
+		"runId":     "run1",
+		"location":  "frontend",
+		"message":   message,
+		"data":      data,
+		"timestamp": time.Now().UnixMilli(),
+	}
+	b, _ := json.Marshal(payload)
+	f, err := os.OpenFile(debugLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	if err == nil {
+		f.Write(b)
+		f.Write([]byte("\n"))
+		f.Close()
+	}
 }
 
 // SyncTickets forces a network sync with YouTrack API
 func (a *App) SyncTickets() ([]Ticket, error) {
-	// Placeholder for YouTrack API interaction
-	log.Println("Syncing tickets from YouTrack API...")
-	// In a real implementation, this would fetch data from YouTrack,
-	// parse it into []Ticket, and then call a.saveTicketsToCache()
-
-	// Simulate fetching data
-	simulatedTickets := []Ticket{
-		{ID: "AGV-100", Summary: "Fix critical bug in login flow", Type: "Bug", Priority: "Critical", Sprints: []string{"Sprint 22"}, Url: "https://myorg.youtrack.cloud/issue/AGV-100"},
-		{ID: "DEV-201", Summary: "Implement new user dashboard feature", Type: "Feature", Priority: "Major", Sprints: []string{"Sprint 23"}, Url: "https://myorg.youtrack.cloud/issue/DEV-201"},
+	logger.Info("Syncing tickets from YouTrack API...")
+	if err := a.ytAPI.SyncTickets(a.ctx); err != nil {
+		return nil, err
 	}
-
-	a.tickets = simulatedTickets
+	a.tickets = a.ytAPI.GetCachedTickets()
 	a.config.LastSyncTime = time.Now().Unix()
-	a.saveConfig()
-	a.saveTicketsToCache()
-
+	_ = a.saveConfig()
+	_ = a.saveTicketsToCache()
 	return a.tickets, nil
 }
 
@@ -165,35 +231,24 @@ func (a *App) HideWindow() {
 
 // ValidateYouTrackToken validates the YouTrack permanent token
 func (a *App) ValidateYouTrackToken(baseURL, token string) (bool, error) {
-	// In a real scenario, make an API call to YouTrack to validate the token
-	// For now, a simple check
 	if baseURL == "" || token == "" {
 		return false, fmt.Errorf("base URL and token cannot be empty")
 	}
-	// Simulate API call success
-	return true, nil
+	err := a.ytAPI.ValidateConnection(a.ctx, baseURL, token)
+	return err == nil, err
 }
 
 // SaveYouTrackToken securely stores the YouTrack permanent token using keyring
 func (a *App) SaveYouTrackToken(token string) error {
-	// Use a service name specific to your app, e.g., "youtrack-spotlight"
-	return keyring.Set("youtrack-spotlight", "token", token)
+	return a.cm.SaveToken(token)
 }
 
 // GetYouTrackToken retrieves the YouTrack permanent token from keyring
 func (a *App) GetYouTrackToken() (string, error) {
-	return keyring.Get("youtrack-spotlight", "token")
+	return a.cm.GetToken(), nil
 }
 
 // FetchProjects fetches all projects from YouTrack API
-func (a *App) FetchProjects(baseURL, token string) ([]string, error) {
-	// Placeholder for YouTrack API interaction to fetch projects
-	// In a real implementation, this would make an authenticated API call
-	// to YouTrack and parse the project names.
-
-	// Simulate fetching projects
-	simulatedProjects := []string{
-		"AGV", "DEV", "OPS", "TEST",
-	}
-	return simulatedProjects, nil
+func (a *App) FetchProjects(baseURL, token string) ([]Project, error) {
+	return a.ytAPI.GetProjects(a.ctx, baseURL, token)
 }

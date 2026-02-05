@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input'; // Uncommented
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'; // Uncommented
 import { AlertCircle, CheckCircle } from 'lucide-react';
-import type { Config, WindowPosition } from '@/types';
+import { main } from 'wailsjs/go/models';
+import { ValidateYouTrackToken, FetchProjects, SaveYouTrackToken, SaveConfig } from 'wailsjs/go/main/App';
+
+interface WindowPosition {
+  label: string;
+  value: string;
+}
 
 const WINDOW_POSITIONS: WindowPosition[] = [
   { label: 'Top Left', value: 'top-left' },
@@ -16,7 +22,7 @@ const WINDOW_POSITIONS: WindowPosition[] = [
 ];
 
 interface SetupWizardProps {
-  onComplete: (config: Config) => Promise<void>;
+  onComplete: (config: main.Config) => Promise<void>;
 }
 
 export function SetupWizard({ onComplete }: SetupWizardProps) {
@@ -25,7 +31,9 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
   const [token, setToken] = useState('');
   const [projects, setProjects] = useState<string[]>([]);
   const [windowPos, setWindowPos] = useState('top-right');
-  const [availableProjects, setAvailableProjects] = useState<string[]>([]);
+  const [availableProjects, setAvailableProjects] = useState<
+    { id: string; name: string; shortName: string; archived: boolean }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
@@ -34,8 +42,8 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
     setIsValidating(true);
     setError('');
     try {
-      await window.go.main.YouTrackAPI.ValidateConnection(baseURL, token);
-      const projectList = await window.go.main.YouTrackAPI.GetProjects(baseURL, token);
+      await ValidateYouTrackToken(baseURL, token);
+      const projectList = await FetchProjects(baseURL, token);
       setAvailableProjects(projectList);
       setStep(3);
     } catch (err) {
@@ -51,17 +59,19 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
       return;
     }
 
-    const config: Config = {
+    const config: main.Config = {
       base_url: baseURL,
-      projects,
+      projects: projects,
       window_pos: windowPos,
       last_sync_time: Date.now(),
+      log_level: "info",
+      log_to_file: false,
     };
 
     try {
       setIsLoading(true);
       // Save token to keyring
-      await window.go.main.ConfigManager.SaveToken(token);
+      await SaveYouTrackToken(token);
       await onComplete(config);
     } catch (err) {
       setError(`Failed to save configuration: ${err instanceof Error ? err.message : 'Unknown error'}`);
@@ -101,7 +111,7 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                 <Input
                   placeholder="https://myorg.youtrack.cloud"
                   value={baseURL}
-                  onChange={(e) => setBaseURL(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBaseURL(e.target.value)}
                   className="mt-2 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
                 />
                 <p className="mt-2 text-xs text-slate-400">e.g., https://myorg.youtrack.cloud</p>
@@ -125,7 +135,7 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                   placeholder="Enter your YouTrack permanent token"
                   type="password"
                   value={token}
-                  onChange={(e) => setToken(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToken(e.target.value)}
                   className="mt-2 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
                 />
                 <p className="mt-2 text-xs text-slate-400">Create this in YouTrack settings under API Tokens</p>
@@ -155,15 +165,15 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
               <div>
                 <label className="text-sm font-medium text-slate-300 block mb-3">Select Projects</label>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {availableProjects.map(project => (
-                    <label key={project} className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-800 transition">
+                  {availableProjects.map(p => (
+                    <label key={p.id} className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-800 transition">
                       <input
                         type="checkbox"
-                        checked={projects.includes(project)}
-                        onChange={() => toggleProject(project)}
+                        checked={projects.includes(p.shortName)}
+                        onChange={() => toggleProject(p.shortName)}
                         className="w-4 h-4 rounded border-slate-600 bg-slate-800"
                       />
-                      <span className="text-sm text-slate-300">{project}</span>
+                      <span className="text-sm text-slate-300">{`${p.shortName} — ${p.name}`}</span>
                     </label>
                   ))}
                 </div>
@@ -194,7 +204,7 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                 <label className="text-sm font-medium text-slate-300 block mb-3">Window Position</label>
                 <select
                   value={windowPos}
-                  onChange={(e) => setWindowPos(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setWindowPos(e.target.value)}
                   className="w-full p-2 bg-slate-800 border border-slate-700 rounded-md text-slate-300"
                 >
                   {WINDOW_POSITIONS.map(pos => (

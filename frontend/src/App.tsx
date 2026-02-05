@@ -2,39 +2,40 @@ import React, { useEffect, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { main } from 'wailsjs/go/models';
+import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
 
-interface Config {
-  BaseURL: string;
-  Projects: string[];
-  WindowPos: string;
-  LastSyncTime: number;
+interface WindowPosition {
+  label: string;
+  value: string;
 }
 
-interface Ticket {
-  ID: string;
-  Summary: string;
-  Type: string;
-  Priority: string;
-  Sprints: string[];
-  Url: string;
-}
+const WINDOW_POSITIONS: WindowPosition[] = [
+  { label: 'Top Left', value: 'top-left' },
+  { label: 'Top Center', value: 'top-center' },
+  { label: 'Top Right', value: 'top-right' },
+  { label: 'Center', value: 'center' },
+  { label: 'Bottom Left', value: 'bottom-left' },
+  { label: 'Bottom Center', value: 'bottom-center' },
+  { label: 'Bottom Right', value: 'bottom-right' },
+];
 
 function App() {
-  const [config, setConfig] = useState<Config | null>(null);
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [config, setConfig] = useState<main.Config | null>(null);
+  const [tickets, setTickets] = useState<main.Ticket[]>([]);
   const [isConfigured, setIsConfigured] = useState(false);
 
   useEffect(() => {
     async function init() {
-      const currentConfig = await window.go.main.GetConfig();
+      const currentConfig = await GetConfig();
       setConfig(currentConfig);
 
-      if (currentConfig.BaseURL && currentConfig.Projects.length > 0) {
+      if (currentConfig.base_url && currentConfig.projects.length > 0) {
         setIsConfigured(true);
-        const cachedTickets = await window.go.main.GetTickets();
+        const cachedTickets = await GetTickets();
         setTickets(cachedTickets);
         // Start background sync
-        window.go.main.SyncTickets();
+        SyncTickets();
       } else {
         setIsConfigured(false);
       }
@@ -58,7 +59,7 @@ function App() {
 }
 
 interface SearchInterfaceProps {
-  tickets: Ticket[];
+  tickets: main.Ticket[];
 }
 
 function SearchInterface({ tickets }: SearchInterfaceProps) {
@@ -68,7 +69,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (search === "") {
-          window.go.main.HideWindow();
+          HideWindow();
         } else {
           setSearch("");
         }
@@ -90,7 +91,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
       <CommandPrimitive.List className="max-h-[300px] overflow-y-auto">
         <CommandPrimitive.Empty>No results found.</CommandPrimitive.Empty>
         {tickets.map((ticket) => (
-          <TicketItem key={ticket.ID} ticket={ticket} />
+          <TicketItem key={ticket.id} ticket={ticket} />
         ))}
       </CommandPrimitive.List>
     </CommandMenu>
@@ -98,7 +99,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
 }
 
 interface SetupWizardProps {
-  setConfig: (config: Config) => void;
+  setConfig: (config: main.Config) => void;
   setIsConfigured: (isConfigured: boolean) => void;
 }
 
@@ -113,29 +114,40 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
 
   const handleValidateAndSaveToken = async () => {
     try {
-      const isValid = await window.go.main.ValidateYouTrackToken(baseURL, token);
+      const isValid = await ValidateYouTrackToken(baseURL, token);
       if (isValid) {
-        await window.go.main.SaveYouTrackToken(token);
+        await SaveYouTrackToken(token);
         setStep(2);
         setError(null);
-        const fetchedProjects = await window.go.main.FetchProjects(baseURL, token);
-        setProjects(fetchedProjects);
+        const fetchedProjects = await FetchProjects(baseURL, token);
+        // fetchedProjects is an array of project objects; store shortName values
+        setProjects(fetchedProjects.map((p: main.Project) => p.shortName));
       } else {
         setError("Invalid YouTrack Base URL or Token.");
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      const message =
+        typeof e === "string"
+          ? e
+          : e instanceof Error
+            ? e.message
+            : (e as { message?: string })?.message ??
+              (e as { Message?: string })?.Message ??
+              (e != null ? String(e) : "Unknown error");
+      setError(message);
     }
   };
 
   const handleSaveConfig = async () => {
-    const newConfig: Config = {
-      BaseURL: baseURL,
-      Projects: selectedProjects,
-      WindowPos: windowPos,
-      LastSyncTime: 0,
+    const newConfig: main.Config = {
+      base_url: baseURL,
+      projects: selectedProjects,
+      window_pos: windowPos,
+      last_sync_time: 0,
+      log_level: "info",
+      log_to_file: false,
     };
-    await window.go.main.SaveConfig(newConfig);
+    await SaveConfig(newConfig);
     setConfig(newConfig);
     setIsConfigured(true);
   };
@@ -211,20 +223,20 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
 }
 
 interface TicketItemProps {
-  ticket: Ticket;
+  ticket: main.Ticket;
 }
 
 function TicketItem({ ticket }: TicketItemProps) {
   const handleSelect = async () => {
     // On Enter: Copy URL
-    await window.go.main.CopyToClipboard(ticket.Url);
-    window.go.main.HideWindow();
+    await CopyToClipboard(ticket.url);
+    HideWindow();
   };
 
   const handleShiftEnter = async () => {
     // On Shift+Enter: Open in Browser
-    await window.go.main.OpenInBrowser(ticket.Url);
-    window.go.main.HideWindow();
+    await OpenInBrowser(ticket.url);
+    HideWindow();
   };
 
   return (
@@ -243,26 +255,26 @@ function TicketItem({ ticket }: TicketItemProps) {
       >
         <div className="flex justify-between items-center">
           <span className="font-bold text-blue-400 w-24 flex-shrink-0">
-            {ticket.ID}
+            {ticket.id}
           </span>
           <span className="flex-grow truncate ... text-white">
-            {ticket.Summary}
+            {ticket.summary}
           </span>
           <span
             className={cn(
               "ml-4 text-right flex-shrink-0",
-              ticket.Priority === "Critical" && "text-red-500",
-              ticket.Priority === "Major" && "text-yellow-500",
-              ticket.Priority === "Minor" && "text-gray-500"
+              ticket.priority === "Critical" && "text-red-500",
+              ticket.priority === "Major" && "text-yellow-500",
+              ticket.priority === "Minor" && "text-gray-500"
             )}
           >
-            {ticket.Priority}
+            {ticket.priority}
           </span>
         </div>
         <div className="flex justify-between items-center text-sm text-gray-400">
-          <span className="text-gray-500">{ticket.Type}</span>
+          <span className="text-gray-500">{ticket.type}</span>
           <div className="flex space-x-1">
-            {ticket.Sprints.map((sprint) => (
+            {ticket.sprints.map((sprint: string) => (
               <span
                 key={sprint}
                 className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"

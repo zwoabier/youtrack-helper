@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { Command } from 'cmdk'
 import { Search, Copy, ExternalLink } from 'lucide-react'
 import { TicketItem } from './TicketItem'
-import * as App from '../../wailsjs/go/app/App'
+import { GetTickets, HideWindow, OpenInBrowser, CopyToClipboard } from '../../wailsjs/go/main/App'
 
 interface SearchInterfaceProps {
   onReconfigure: () => void
@@ -36,13 +36,73 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
     setSelectedIndex(0)
   }, [search, tickets])
 
+  // Debug: report filteredTickets changes to ingest endpoint and console
+  useEffect(() => {
+    try {
+      console.log('filteredTickets updated', filteredTickets.length)
+      fetch('http://127.0.0.1:7242/ingest/f9cf7c51-4fcd-40aa-bdf5-3e8d3c5f549f', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'frontend/src/components/SearchInterface.tsx:filteredTicketsEffect',
+          message: 'filtered_tickets_update',
+          data: { count: filteredTickets.length, search },
+          timestamp: Date.now(),
+          sessionId: 'debug-session'
+        })
+      }).catch(()=>{})
+    } catch (e) {
+      // ignore
+    }
+  }, [filteredTickets, search])
+
   const loadTickets = async () => {
     try {
-      const items = await App.GetTickets()
+      const items = await GetTickets()
       setTickets(items || [])
       setFilteredTickets(items || [])
+      try {
+        // Call backend to record that frontend received tickets
+        // @ts-ignore - generated binding will appear after wails rebuild
+        if ((window as any).go && (window as any).go.main && (window as any).go.main.App && (window as any).go.main.App.FrontendLog) {
+          const sample = (items || []).slice(0, 5).map((t: any) => t.id)
+          await (window as any).go.main.App.FrontendLog('frontend_received_tickets', { count: (items || []).length, sample })
+        }
+      } catch (e) {
+        // ignore
+      }
+      // Debug: send NDJSON-style log to ingest endpoint
+      try {
+        const sample = (items || []).slice(0, 5).map((t: any) => t.id)
+        fetch('http://127.0.0.1:7242/ingest/f9cf7c51-4fcd-40aa-bdf5-3e8d3c5f549f', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            location: 'frontend/src/components/SearchInterface.tsx:loadTickets',
+            message: 'load_tickets',
+            data: { count: (items || []).length, sample },
+            timestamp: Date.now(),
+            sessionId: 'debug-session'
+          })
+        }).catch(()=>{})
+      } catch (e) {
+        // ignore
+      }
     } catch (error) {
       console.error('Failed to load tickets:', error)
+      try {
+        fetch('http://127.0.0.1:7242/ingest/f9cf7c51-4fcd-40aa-bdf5-3e8d3c5f549f', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            location: 'frontend/src/components/SearchInterface.tsx:loadTickets',
+            message: 'load_tickets_error',
+            data: { error: String(error) },
+            timestamp: Date.now(),
+            sessionId: 'debug-session'
+          })
+        }).catch(()=>{})
+      } catch (e) {}
     }
   }
 
@@ -51,7 +111,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
       if (search) {
         setSearch('')
       } else {
-        App.HideWindow()
+        HideWindow()
       }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
@@ -63,14 +123,17 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
       e.preventDefault()
       if (filteredTickets[selectedIndex]) {
         if (e.shiftKey || e.ctrlKey) {
-          App.OpenInBrowser(filteredTickets[selectedIndex].url)
+          OpenInBrowser(filteredTickets[selectedIndex].url)
         } else {
-          App.CopyToClipboard(filteredTickets[selectedIndex].url)
+          CopyToClipboard(filteredTickets[selectedIndex].url)
         }
-        App.HideWindow()
+        HideWindow()
       }
     }
   }
+
+  const MAX_RENDER = 50
+  const displayedTickets = filteredTickets.slice(0, MAX_RENDER)
 
   return (
     <div className="h-screen w-screen bg-slate-950 flex flex-col overflow-hidden">
@@ -82,10 +145,20 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              try {
+                if ((window as any).go && (window as any).go.main && (window as any).go.main.App && (window as any).go.main.App.FrontendLog) {
+                  ;(window as any).go.main.App.FrontendLog('input_keydown', { key: e.key })
+                }
+              } catch (err) {}
+            }}
             placeholder="Search tickets..."
             className="flex-1 bg-transparent outline-none text-white placeholder-slate-500"
             autoFocus
           />
+        </div>
+        <div className="mt-2 text-xs text-slate-400">
+          Tickets: {tickets.length} • Filtered: {filteredTickets.length} • Sample: {filteredTickets.slice(0,5).map(t=>t.id).join(', ')}
         </div>
       </div>
 
@@ -96,7 +169,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
           </div>
         ) : (
           <div className="divide-y divide-slate-800">
-            {filteredTickets.map((ticket, index) => (
+            {displayedTickets.map((ticket, index) => (
               <TicketItem
                 key={ticket.id}
                 ticket={ticket}
@@ -104,6 +177,11 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
                 onSelect={() => setSelectedIndex(index)}
               />
             ))}
+            {filteredTickets.length > MAX_RENDER && (
+              <div className="p-4 text-center text-sm text-slate-400">
+                Showing first {MAX_RENDER} of {filteredTickets.length} results
+              </div>
+            )}
           </div>
         )}
       </div>
