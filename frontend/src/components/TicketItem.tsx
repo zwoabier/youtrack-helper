@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import clsx from 'clsx'
 
 interface TicketItemProps {
@@ -14,15 +15,17 @@ const priorityColors: Record<string, string> = {
   '': 'text-slate-400',
 }
 
-export function TicketItem({ ticket, isSelected, onSelect }: TicketItemProps) {
-  return (
-    <div
-      onClick={onSelect}
-      className={clsx(
-        'px-4 py-3 cursor-pointer transition-colors',
-        isSelected ? 'bg-slate-800' : 'hover:bg-slate-900'
-      )}
-    >
+export const TicketItem = forwardRef<HTMLDivElement, TicketItemProps>(
+  function TicketItem({ ticket, isSelected, onSelect }, ref) {
+    return (
+      <div
+        ref={ref}
+        onClick={onSelect}
+        className={clsx(
+          'px-4 py-3 cursor-pointer transition-colors',
+          isSelected ? 'bg-slate-800' : 'hover:bg-slate-900'
+        )}
+      >
       <div className="flex items-center gap-3 mb-2">
         <span className="font-bold text-cyan-400 min-w-fit">{ticket.id}</span>
         <span className="text-white flex-1 truncate">{ticket.summary}</span>
@@ -46,3 +49,4 @@ export function TicketItem({ ticket, isSelected, onSelect }: TicketItemProps) {
     </div>
   )
 }
+)

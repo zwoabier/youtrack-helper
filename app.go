@@ -184,21 +184,25 @@ func (a *App) GetTickets() []Ticket {
 
 // FrontendLog allows the frontend to write a debug entry to the NDJSON debug log.
 func (a *App) FrontendLog(message string, data map[string]interface{}) {
-	payload := map[string]interface{}{
-		"sessionId": "debug-session",
-		"runId":     "run1",
-		"location":  "frontend",
-		"message":   message,
-		"data":      data,
-		"timestamp": time.Now().UnixMilli(),
-	}
-	b, _ := json.Marshal(payload)
-	f, err := os.OpenFile(debugLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
-	if err == nil {
-		f.Write(b)
-		f.Write([]byte("\n"))
-		f.Close()
-	}
+	// Perform log write asynchronously to avoid blocking the UI/renderer
+	go func(msg string, d map[string]interface{}) {
+		payload := map[string]interface{}{
+			"sessionId": "debug-session",
+			"runId":     "run1",
+			"location":  "frontend",
+			"message":   msg,
+			"data":      d,
+			"timestamp": time.Now().UnixMilli(),
+		}
+		b, _ := json.Marshal(payload)
+		f, err := os.OpenFile(debugLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+		if err == nil {
+			// Best-effort write; ignore errors to keep this non-blocking
+			_, _ = f.Write(b)
+			_, _ = f.Write([]byte("\n"))
+			_ = f.Close()
+		}
+	}(message, data)
 }
 
 // SyncTickets forces a network sync with YouTrack API

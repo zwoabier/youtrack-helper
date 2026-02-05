@@ -153,24 +153,24 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
   };
 
   return (
-    <div className="p-8">
+    <div className="min-h-screen p-8 bg-gray-900 flex flex-col">
       <h1 className="text-2xl font-bold mb-4">Setup Wizard</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {error && <p className="text-red-500 mb-4 p-3 bg-red-900 rounded">{error}</p>}
 
       {step === 1 && (
-        <div>
-          <h2 className="text-xl mb-2">Step 1: YouTrack Configuration</h2>
+        <div className="flex-1 flex flex-col max-w-md">
+          <h2 className="text-xl mb-4">Step 1: YouTrack Configuration</h2>
           <input
             type="text"
             placeholder="YouTrack Base URL (e.g., https://myorg.youtrack.cloud)"
-            className="w-full p-2 mb-2 bg-gray-700 rounded"
+            className="w-full p-3 mb-3 bg-gray-700 rounded text-white"
             value={baseURL}
             onChange={(e) => setBaseURL(e.target.value)}
           />
           <input
             type="password"
             placeholder="Permanent Token"
-            className="w-full p-2 mb-4 bg-gray-700 rounded"
+            className="w-full p-3 mb-4 bg-gray-700 rounded text-white"
             value={token}
             onChange={(e) => setToken(e.target.value)}
           />
@@ -179,42 +179,71 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
       )}
 
       {step === 2 && (
-        <div>
-          <h2 className="text-xl mb-2">Step 2: Project Selection</h2>
-          <select
-            multiple
-            className="w-full p-2 mb-4 bg-gray-700 rounded h-40"
-            value={selectedProjects}
-            onChange={(e) =>
-              setSelectedProjects(
-                Array.from(e.target.selectedOptions, (option) => option.value)
-              )
-            }
-          >
-            {projects.map((project) => (
-              <option key={project} value={project}>
-                {project}
-              </option>
-            ))}
-          </select>
+        <div className="flex-1 flex flex-col">
+          <h2 className="text-xl mb-4">Step 2: Project Selection</h2>
+          <div className="mb-4 p-3 bg-gray-700 rounded text-sm">
+            {selectedProjects.length === 0
+              ? 'No projects selected'
+              : `${selectedProjects.length} project(s) selected: ${selectedProjects.join(', ')}`}
+          </div>
+          <div className="bg-gray-700 rounded p-4 mb-4 overflow-y-auto max-h-64 flex-1">
+            {projects.length === 0 ? (
+              <p className="text-gray-400">No projects available</p>
+            ) : (
+              <div className="space-y-2">
+                {projects.map((project) => (
+                  <label key={project} className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedProjects.includes(project)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedProjects([...selectedProjects, project])
+                        } else {
+                          setSelectedProjects(
+                            selectedProjects.filter((p) => p !== project)
+                          )
+                        }
+                      }}
+                      className="mr-3"
+                    />
+                    <span>{project}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
           <Button onClick={() => setStep(3)}>Next</Button>
         </div>
       )}
 
       {step === 3 && (
-        <div>
-          <h2 className="text-xl mb-2">Step 3: Window Position</h2>
-          <select
-            className="w-full p-2 mb-4 bg-gray-700 rounded"
-            value={windowPos}
-            onChange={(e) => setWindowPos(e.target.value)}
-          >
-            <option value="Top Left">Top Left</option>
-            <option value="Top Center">Top Center</option>
-            <option value="Top Right">Top Right</option>
-            <option value="Center">Center</option>
-            <option value="Bottom Right">Bottom Right</option>
-          </select>
+        <div className="flex-1 flex flex-col">
+          <h2 className="text-xl mb-4">Step 3: Window Position</h2>
+          <div className="bg-gray-700 rounded p-4 mb-4 flex-1">
+            <div className="space-y-3">
+              {[
+                { label: 'Top Left', value: 'Top Left' },
+                { label: 'Top Center', value: 'Top Center' },
+                { label: 'Top Right', value: 'Top Right' },
+                { label: 'Center', value: 'Center' },
+                { label: 'Bottom Left', value: 'Bottom Left' },
+                { label: 'Bottom Center', value: 'Bottom Center' },
+                { label: 'Bottom Right', value: 'Bottom Right' },
+              ].map((pos) => (
+                <label key={pos.value} className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="windowPos"
+                    checked={windowPos === pos.value}
+                    onChange={() => setWindowPos(pos.value)}
+                    className="mr-3"
+                  />
+                  <span>{pos.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
           <Button onClick={handleSaveConfig}>Finish Setup</Button>
         </div>
       )}
@@ -271,17 +300,19 @@ function TicketItem({ ticket }: TicketItemProps) {
             {ticket.priority}
           </span>
         </div>
-        <div className="flex justify-between items-center text-sm text-gray-400">
+          <div className="flex justify-between items-center text-sm text-gray-400">
           <span className="text-gray-500">{ticket.type}</span>
           <div className="flex space-x-1">
-            {ticket.sprints.map((sprint: string) => (
-              <span
-                key={sprint}
-                className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"
-              >
-                {sprint}
-              </span>
-            ))}
+            {ticket.sprints && ticket.sprints.length > 0 ? (
+              ticket.sprints.map((sprint: string) => (
+                <span
+                  key={sprint}
+                  className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"
+                >
+                  {sprint}
+                </span>
+              ))
+            ) : null}
           </div>
         </div>
       </div>

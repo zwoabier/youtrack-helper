@@ -14,12 +14,40 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
+  const selectedItemRef = useRef<HTMLDivElement>(null)
+  const resultsContainerRef = useRef<HTMLDivElement>(null)
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (search) {
+        setSearch('')
+      } else {
+        HideWindow()
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSelectedIndex(prev => Math.max(0, prev - 1))
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSelectedIndex(prev => Math.min(filteredTickets.length - 1, prev + 1))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (filteredTickets[selectedIndex]) {
+        if (e.shiftKey || e.ctrlKey) {
+          OpenInBrowser(filteredTickets[selectedIndex].url)
+        } else {
+          CopyToClipboard(filteredTickets[selectedIndex].url)
+        }
+        HideWindow()
+      }
+    }
+  }
 
   useEffect(() => {
     loadTickets()
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [handleKeyDown])
 
   useEffect(() => {
     if (search.trim() === '') {
@@ -34,7 +62,15 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
       setFilteredTickets(filtered)
     }
     setSelectedIndex(0)
+    if (resultsContainerRef.current) {
+      resultsContainerRef.current.scrollTop = 0
+    }
   }, [search, tickets])
+
+  // Auto-scroll selected item into view when selection or filtered results change
+  useEffect(() => {
+    selectedItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [selectedIndex, filteredTickets])
 
   // Debug: report filteredTickets changes to ingest endpoint and console
   useEffect(() => {
@@ -106,32 +142,6 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      if (search) {
-        setSearch('')
-      } else {
-        HideWindow()
-      }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setSelectedIndex(prev => Math.max(0, prev - 1))
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setSelectedIndex(prev => Math.min(filteredTickets.length - 1, prev + 1))
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      if (filteredTickets[selectedIndex]) {
-        if (e.shiftKey || e.ctrlKey) {
-          OpenInBrowser(filteredTickets[selectedIndex].url)
-        } else {
-          CopyToClipboard(filteredTickets[selectedIndex].url)
-        }
-        HideWindow()
-      }
-    }
-  }
-
   const MAX_RENDER = 50
   const displayedTickets = filteredTickets.slice(0, MAX_RENDER)
 
@@ -162,7 +172,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div ref={resultsContainerRef} className="flex-1 overflow-y-auto">
         {filteredTickets.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-400">
             No tickets found
@@ -175,6 +185,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
                 ticket={ticket}
                 isSelected={index === selectedIndex}
                 onSelect={() => setSelectedIndex(index)}
+                ref={index === selectedIndex ? selectedItemRef : undefined}
               />
             ))}
             {filteredTickets.length > MAX_RENDER && (

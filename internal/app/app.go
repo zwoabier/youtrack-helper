@@ -221,6 +221,7 @@ func (a *App) parseTickets(issues []YouTrackIssue) []Ticket {
 			URL:     issue.URL,
 		}
 
+		// Extract known fields (Priority, Type, and Sprints)
 		for _, field := range issue.CustomFields {
 			switch field.Name {
 			case "Priority":
