@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
+import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard } from 'wailsjs/go/main/App';
 const WINDOW_POSITIONS = [
     { label: 'Top Left', value: 'top-left' },
     { label: 'Top Center', value: 'top-center' },
@@ -41,21 +41,120 @@ function App() {
 }
 function SearchInterface({ tickets }) {
     const [search, setSearch] = useState("");
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [filteredTickets, setFilteredTickets] = useState([]);
+    const inputRef = useRef(null);
+    const selectedItemRef = useRef(null);
+    const resultsContainerRef = useRef(null);
+    const lastSearchRef = useRef("");
+    // Effect 1: Filter and rank tickets based on search query
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === "Escape") {
-                if (search === "") {
-                    HideWindow();
+        if (search.trim() === "") {
+            // No search: show all tickets
+            setFilteredTickets(tickets);
+        }
+        else {
+            // Calculate relevance scores for each ticket
+            const searchLower = search.toLowerCase();
+            const scored = tickets.map((ticket) => {
+                let score = 0;
+                // ID exact match: 1000 points
+                if (ticket.id.toLowerCase() === searchLower) {
+                    score += 1000;
                 }
-                else {
-                    setSearch("");
+                // ID starts with query: 800 points
+                else if (ticket.id.toLowerCase().startsWith(searchLower)) {
+                    score += 800;
                 }
+                // ID contains query: 600 points
+                else if (ticket.id.toLowerCase().includes(searchLower)) {
+                    score += 600;
+                }
+                // Summary contains query: 400 points
+                if (ticket.summary.toLowerCase().includes(searchLower)) {
+                    score += 400;
+                }
+                // Type contains query: 200 points
+                if (ticket.type && ticket.type.toLowerCase().includes(searchLower)) {
+                    score += 200;
+                }
+                // Priority contains query: 100 points
+                if (ticket.priority && ticket.priority.toLowerCase().includes(searchLower)) {
+                    score += 100;
+                }
+                // Sprints contain query: 100 points
+                if (ticket.sprints && ticket.sprints.some(s => s.toLowerCase().includes(searchLower))) {
+                    score += 100;
+                }
+                return { ticket, score };
+            });
+            // Filter out zero-score results and sort by score descending
+            const filtered = scored
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .map(item => item.ticket);
+            setFilteredTickets(filtered);
+        }
+    }, [search, tickets]);
+    // Effect 2: Reset selection and scroll to top when search query changes
+    useEffect(() => {
+        if (search !== lastSearchRef.current) {
+            setSelectedIndex(0);
+            // Scroll container to top
+            if (resultsContainerRef.current) {
+                resultsContainerRef.current.scrollTop = 0;
             }
-        };
+            lastSearchRef.current = search;
+        }
+    }, [search]);
+    // Effect 3: Scroll selected item into view
+    useEffect(() => {
+        if (selectedItemRef.current) {
+            selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }, [selectedIndex, filteredTickets]);
+    // Keyboard navigation handler
+    const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+            if (search === "") {
+                HideWindow();
+            }
+            else {
+                setSearch("");
+            }
+        }
+        else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setSelectedIndex((prev) => prev < filteredTickets.length - 1 ? prev + 1 : prev);
+        }
+        else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        }
+        else if (e.key === "Enter") {
+            e.preventDefault();
+            if (filteredTickets[selectedIndex]) {
+                const ticket = filteredTickets[selectedIndex];
+                const markdownLink = `[${ticket.id}](${ticket.url})`;
+                CopyToClipboard(markdownLink);
+                HideWindow();
+            }
+        }
+    };
+    useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [search]);
-    return (_jsxs(CommandMenu, { children: [_jsx(CommandPrimitive.Input, { value: search, onValueChange: setSearch, placeholder: "Search YouTrack tickets...", className: "h-12 w-full border-none bg-transparent px-4 py-3 text-lg outline-none", autoFocus: true }), _jsxs(CommandPrimitive.List, { className: "max-h-[300px] overflow-y-auto", children: [_jsx(CommandPrimitive.Empty, { children: "No results found." }), tickets.map((ticket) => (_jsx(TicketItem, { ticket: ticket }, ticket.id)))] })] }));
+    }, [search, filteredTickets, selectedIndex]);
+    const handleTicketSelect = async (ticket) => {
+        const markdownLink = `[${ticket.id}](${ticket.url})`;
+        await CopyToClipboard(markdownLink);
+        HideWindow();
+    };
+    return (_jsxs(CommandMenu, { children: [_jsx(CommandPrimitive.Input, { ref: inputRef, value: search, onValueChange: setSearch, placeholder: "Search YouTrack tickets...", className: "h-12 w-full border-none bg-transparent px-4 py-3 text-lg outline-none", autoFocus: true }), _jsxs(CommandPrimitive.List, { ref: resultsContainerRef, className: "max-h-[300px] overflow-y-auto", children: [filteredTickets.length === 0 ? (_jsx(CommandPrimitive.Empty, { children: "No results found." })) : (_jsxs("div", { className: "text-xs text-gray-500 px-4 py-2", children: ["Showing ", filteredTickets.length, " result", filteredTickets.length !== 1 ? "s" : ""] })), filteredTickets.map((ticket, index) => (_jsx("div", { ref: index === selectedIndex ? selectedItemRef : null, onClick: () => handleTicketSelect(ticket), className: cn("flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors", index === selectedIndex
+                            ? "bg-accent text-accent-foreground"
+                            : "hover:bg-accent hover:bg-opacity-50"), children: _jsxs("div", { className: "flex flex-col flex-grow group", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "font-bold text-blue-400 w-24 flex-shrink-0", children: ticket.id }), _jsx("span", { className: "flex-grow truncate text-white", children: ticket.summary }), _jsx("span", { className: cn("ml-4 text-right flex-shrink-0", ticket.priority === "Critical" && "text-red-500", ticket.priority === "Major" && "text-yellow-500", ticket.priority === "Minor" && "text-gray-500"), children: ticket.priority })] }), _jsxs("div", { className: "flex justify-between items-center text-sm text-gray-400", children: [_jsx("span", { className: "text-gray-500", children: ticket.type }), _jsx("div", { className: "flex space-x-1", children: ticket.sprints && ticket.sprints.length > 0
+                                                ? ticket.sprints.map((sprint) => (_jsx("span", { className: "px-2 py-0.5 border border-gray-500 rounded-full text-xs", children: sprint }, sprint)))
+                                                : null })] })] }) }, ticket.id)))] })] }));
 }
 function SetupWizard({ setConfig, setIsConfigured }) {
     const [baseURL, setBaseURL] = useState("");
@@ -122,20 +221,6 @@ function SetupWizard({ setConfig, setIsConfigured }) {
                                 { label: 'Bottom Center', value: 'Bottom Center' },
                                 { label: 'Bottom Right', value: 'Bottom Right' },
                             ].map((pos) => (_jsxs("label", { className: "flex items-center cursor-pointer", children: [_jsx("input", { type: "radio", name: "windowPos", checked: windowPos === pos.value, onChange: () => setWindowPos(pos.value), className: "mr-3" }), _jsx("span", { children: pos.label })] }, pos.value))) }) }), _jsx(Button, { onClick: handleSaveConfig, children: "Finish Setup" })] }))] }));
-}
-function TicketItem({ ticket }) {
-    const handleSelect = async () => {
-        // On Enter: Copy markdown link
-        const markdownLink = `[${ticket.id}](${ticket.url})`;
-        await CopyToClipboard(markdownLink);
-        HideWindow();
-    };
-    const handleShiftEnter = async () => {
-        // On Shift+Enter: Open in Browser
-        await OpenInBrowser(ticket.url);
-        HideWindow();
-    };
-    return (_jsx(CommandPrimitive.Item, { onSelect: handleSelect, className: cn("flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none", "aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"), children: _jsxs("div", { className: cn("flex flex-col flex-grow group", "data-[selected=true]:bg-accent"), children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "font-bold text-blue-400 w-24 flex-shrink-0", children: ticket.id }), _jsx("span", { className: "flex-grow truncate ... text-white", children: ticket.summary }), _jsx("span", { className: cn("ml-4 text-right flex-shrink-0", ticket.priority === "Critical" && "text-red-500", ticket.priority === "Major" && "text-yellow-500", ticket.priority === "Minor" && "text-gray-500"), children: ticket.priority })] }), _jsxs("div", { className: "flex justify-between items-center text-sm text-gray-400", children: [_jsx("span", { className: "text-gray-500", children: ticket.type }), _jsx("div", { className: "flex space-x-1", children: ticket.sprints && ticket.sprints.length > 0 ? (ticket.sprints.map((sprint) => (_jsx("span", { className: "px-2 py-0.5 border border-gray-500 rounded-full text-xs", children: sprint }, sprint)))) : null })] })] }) }));
 }
 const CommandMenu = React.forwardRef(({ className, ...props }, ref) => (_jsx(CommandPrimitive, { ref: ref, className: cn("flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground", className), ...props })));
 CommandMenu.displayName = CommandPrimitive.displayName;

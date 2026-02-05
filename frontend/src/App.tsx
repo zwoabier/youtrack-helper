@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -64,34 +64,197 @@ interface SearchInterfaceProps {
 
 function SearchInterface({ tickets }: SearchInterfaceProps) {
   const [search, setSearch] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [filteredTickets, setFilteredTickets] = useState<main.Ticket[]>([]);
+  
+  const inputRef = useRef<HTMLInputElement>(null);
+  const selectedItemRef = useRef<HTMLDivElement>(null);
+  const resultsContainerRef = useRef<HTMLDivElement>(null);
+  const lastSearchRef = useRef("");
+
+  // Effect 1: Filter and rank tickets based on search query
+  useEffect(() => {
+    if (search.trim() === "") {
+      // No search: show all tickets
+      setFilteredTickets(tickets);
+    } else {
+      // Calculate relevance scores for each ticket
+      const searchLower = search.toLowerCase();
+      const scored = tickets.map((ticket) => {
+        let score = 0;
+
+        // ID exact match: 1000 points
+        if (ticket.id.toLowerCase() === searchLower) {
+          score += 1000;
+        }
+        // ID starts with query: 800 points
+        else if (ticket.id.toLowerCase().startsWith(searchLower)) {
+          score += 800;
+        }
+        // ID contains query: 600 points
+        else if (ticket.id.toLowerCase().includes(searchLower)) {
+          score += 600;
+        }
+
+        // Summary contains query: 400 points
+        if (ticket.summary.toLowerCase().includes(searchLower)) {
+          score += 400;
+        }
+
+        // Type contains query: 200 points
+        if (ticket.type && ticket.type.toLowerCase().includes(searchLower)) {
+          score += 200;
+        }
+
+        // Priority contains query: 100 points
+        if (ticket.priority && ticket.priority.toLowerCase().includes(searchLower)) {
+          score += 100;
+        }
+
+        // Sprints contain query: 100 points
+        if (ticket.sprints && ticket.sprints.some(s => s.toLowerCase().includes(searchLower))) {
+          score += 100;
+        }
+
+        return { ticket, score };
+      });
+
+      // Filter out zero-score results and sort by score descending
+      const filtered = scored
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.ticket);
+
+      setFilteredTickets(filtered);
+    }
+  }, [search, tickets]);
+
+  // Effect 2: Reset selection and scroll to top when search query changes
+  useEffect(() => {
+    if (search !== lastSearchRef.current) {
+      setSelectedIndex(0);
+      // Scroll container to top
+      if (resultsContainerRef.current) {
+        resultsContainerRef.current.scrollTop = 0;
+      }
+      lastSearchRef.current = search;
+    }
+  }, [search]);
+
+  // Effect 3: Scroll selected item into view
+  useEffect(() => {
+    if (selectedItemRef.current) {
+      selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [selectedIndex, filteredTickets]);
+
+  // Keyboard navigation handler
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      if (search === "") {
+        HideWindow();
+      } else {
+        setSearch("");
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((prev) =>
+        prev < filteredTickets.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (filteredTickets[selectedIndex]) {
+        const ticket = filteredTickets[selectedIndex];
+        const markdownLink = `[${ticket.id}](${ticket.url})`;
+        CopyToClipboard(markdownLink);
+        HideWindow();
+      }
+    }
+  };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (search === "") {
-          HideWindow();
-        } else {
-          setSearch("");
-        }
-      }
-    };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [search]);
+  }, [search, filteredTickets, selectedIndex]);
+
+  const handleTicketSelect = async (ticket: main.Ticket) => {
+    const markdownLink = `[${ticket.id}](${ticket.url})`;
+    await CopyToClipboard(markdownLink);
+    HideWindow();
+  };
 
   return (
     <CommandMenu>
       <CommandPrimitive.Input
+        ref={inputRef}
         value={search}
         onValueChange={setSearch}
         placeholder="Search YouTrack tickets..."
         className="h-12 w-full border-none bg-transparent px-4 py-3 text-lg outline-none"
         autoFocus
       />
-      <CommandPrimitive.List className="max-h-[300px] overflow-y-auto">
-        <CommandPrimitive.Empty>No results found.</CommandPrimitive.Empty>
-        {tickets.map((ticket) => (
-          <TicketItem key={ticket.id} ticket={ticket} />
+      <CommandPrimitive.List
+        ref={resultsContainerRef}
+        className="max-h-[300px] overflow-y-auto"
+      >
+        {filteredTickets.length === 0 ? (
+          <CommandPrimitive.Empty>No results found.</CommandPrimitive.Empty>
+        ) : (
+          <div className="text-xs text-gray-500 px-4 py-2">
+            Showing {filteredTickets.length} result{filteredTickets.length !== 1 ? "s" : ""}
+          </div>
+        )}
+        {filteredTickets.map((ticket, index) => (
+          <div
+            key={ticket.id}
+            ref={index === selectedIndex ? selectedItemRef : null}
+            onClick={() => handleTicketSelect(ticket)}
+            className={cn(
+              "flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
+              index === selectedIndex
+                ? "bg-accent text-accent-foreground"
+                : "hover:bg-accent hover:bg-opacity-50"
+            )}
+          >
+            <div className="flex flex-col flex-grow group">
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-blue-400 w-24 flex-shrink-0">
+                  {ticket.id}
+                </span>
+                <span className="flex-grow truncate text-white">
+                  {ticket.summary}
+                </span>
+                <span
+                  className={cn(
+                    "ml-4 text-right flex-shrink-0",
+                    ticket.priority === "Critical" && "text-red-500",
+                    ticket.priority === "Major" && "text-yellow-500",
+                    ticket.priority === "Minor" && "text-gray-500"
+                  )}
+                >
+                  {ticket.priority}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-sm text-gray-400">
+                <span className="text-gray-500">{ticket.type}</span>
+                <div className="flex space-x-1">
+                  {ticket.sprints && ticket.sprints.length > 0
+                    ? ticket.sprints.map((sprint: string) => (
+                        <span
+                          key={sprint}
+                          className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"
+                        >
+                          {sprint}
+                        </span>
+                      ))
+                    : null}
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
       </CommandPrimitive.List>
     </CommandMenu>
@@ -248,76 +411,6 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
         </div>
       )}
     </div>
-  );
-}
-
-interface TicketItemProps {
-  ticket: main.Ticket;
-}
-
-function TicketItem({ ticket }: TicketItemProps) {
-  const handleSelect = async () => {
-    // On Enter: Copy markdown link
-    const markdownLink = `[${ticket.id}](${ticket.url})`
-    await CopyToClipboard(markdownLink)
-    HideWindow()
-  }
-
-  const handleShiftEnter = async () => {
-    // On Shift+Enter: Open in Browser
-    await OpenInBrowser(ticket.url)
-    HideWindow()
-  }
-
-  return (
-    <CommandPrimitive.Item
-      onSelect={handleSelect}
-      className={cn(
-        "flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-        "aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"
-      )}
-    >
-      <div
-        className={cn(
-          "flex flex-col flex-grow group",
-          "data-[selected=true]:bg-accent"
-        )}
-      >
-        <div className="flex justify-between items-center">
-          <span className="font-bold text-blue-400 w-24 flex-shrink-0">
-            {ticket.id}
-          </span>
-          <span className="flex-grow truncate ... text-white">
-            {ticket.summary}
-          </span>
-          <span
-            className={cn(
-              "ml-4 text-right flex-shrink-0",
-              ticket.priority === "Critical" && "text-red-500",
-              ticket.priority === "Major" && "text-yellow-500",
-              ticket.priority === "Minor" && "text-gray-500"
-            )}
-          >
-            {ticket.priority}
-          </span>
-        </div>
-          <div className="flex justify-between items-center text-sm text-gray-400">
-          <span className="text-gray-500">{ticket.type}</span>
-          <div className="flex space-x-1">
-            {ticket.sprints && ticket.sprints.length > 0 ? (
-              ticket.sprints.map((sprint: string) => (
-                <span
-                  key={sprint}
-                  className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"
-                >
-                  {sprint}
-                </span>
-              ))
-            ) : null}
-          </div>
-        </div>
-      </div>
-    </CommandPrimitive.Item>
   );
 }
 

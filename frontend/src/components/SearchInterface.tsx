@@ -135,16 +135,21 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
     }
 
     setSelectedIndex(0)
-    // Scroll results container to top when search changes or results update
+  }, [search, tickets])
+
+  // Scroll to top when search changes or results update
+  // This runs AFTER the component re-renders with new filteredTickets
+  useEffect(() => {
     if (resultsContainerRef.current) {
       resultsContainerRef.current.scrollTop = 0
     }
-  }, [search, tickets])
+  }, [search, filteredTickets])
 
-  // Auto-scroll selected item into view when selection or filtered results change
+  // Scroll selected item into view when arrow keys change selection
+  // This only runs when selectedIndex changes (not when search changes)
   useEffect(() => {
     selectedItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [selectedIndex, filteredTickets])
+  }, [selectedIndex])
 
   // Debug: report filteredTickets changes to ingest endpoint and console
   useEffect(() => {
