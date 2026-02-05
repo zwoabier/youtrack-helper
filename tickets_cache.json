@@ -1,5 +1,33 @@
 [
   {
+    "id": "AGV-927",
+    "summary": "BLS: Configure ERGO Forwarding from BLS Inbox to Mailjet Inbound",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-927"
+  },
+  {
+    "id": "AGV-958",
+    "summary": "[FE]: Adjust document types",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-958"
+  },
+  {
+    "id": "AGV-905",
+    "summary": "CRM – Map “asc_datum” to “LLE Stop Date”",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": null,
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-905"
+  },
+  {
     "id": "AGV-888",
     "summary": "Improve senderLike mails filtering",
     "type": "User Story",
@@ -512,14 +540,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-569"
   },
   {
-    "id": "AGV-905",
-    "summary": "CRM – Map “asc_datum” to “LLE Stop Date”",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": null,
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-905"
-  },
-  {
     "id": "AGV-600",
     "summary": "Send Email Confirmation to Employer",
     "type": "User Story",
@@ -963,16 +983,6 @@
       "AGV_Sprint_23"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-947"
-  },
-  {
-    "id": "AGV-927",
-    "summary": "BLS: Configure ERGO Forwarding from BLS Inbox to Mailjet Inbound",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-927"
   },
   {
     "id": "AGV-902",

@@ -125,8 +125,9 @@ function SetupWizard({ setConfig, setIsConfigured }) {
 }
 function TicketItem({ ticket }) {
     const handleSelect = async () => {
-        // On Enter: Copy URL
-        await CopyToClipboard(ticket.url);
+        // On Enter: Copy markdown link
+        const markdownLink = `[${ticket.id}](${ticket.url})`;
+        await CopyToClipboard(markdownLink);
         HideWindow();
     };
     const handleShiftEnter = async () => {

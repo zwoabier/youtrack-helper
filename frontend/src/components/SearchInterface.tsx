@@ -36,7 +36,9 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
         if (e.shiftKey || e.ctrlKey) {
           OpenInBrowser(filteredTickets[selectedIndex].url)
         } else {
-          CopyToClipboard(filteredTickets[selectedIndex].url)
+          const ticket = filteredTickets[selectedIndex]
+          const markdownLink = `[${ticket.id}](${ticket.url})`
+          CopyToClipboard(markdownLink)
         }
         HideWindow()
       }
@@ -49,19 +51,91 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
+  /**
+   * Search and Sort Effect
+   * 
+   * EMPTY SEARCH BEHAVIOR:
+   * - When search bar is empty, tickets are sorted by ID in descending order (newest first)
+   * - Example: AGV-920, AGV-919, AGV-918... (higher numbers first)
+   * 
+   * SEARCH BEHAVIOR WITH RELEVANCE SCORING:
+   * When user types in the search bar, results are filtered and ranked by relevance score.
+   * Each ticket receives a relevance score based on which fields match the query:
+   * 
+   * RELEVANCE SCORING SYSTEM:
+   * - ID exact match: 1000 points (e.g., searching "AGV-910" finds exact ticket)
+   * - ID starts with query: 800 points (e.g., searching "AGV-9" matches "AGV-910")
+   * - ID contains query: 600 points (e.g., searching "910" matches "AGV-910")
+   * - Summary match: 400 points (ticket title/description contains query)
+   * - Type match: 200 points (e.g., "User Story", "Epic" contains query)
+   * - Priority match: 100 points (e.g., "Critical", "Major" contains query)
+   * - Sprints match: 100 points (e.g., "AGV_Sprint_22" contains query)
+   * 
+   * Results with score > 0 are displayed, sorted by score descending (best matches first).
+   * If multiple fields match, scores are cumulative (e.g., ID + Summary match = higher score).
+   */
   useEffect(() => {
+    let processed = [...tickets]
+
     if (search.trim() === '') {
-      setFilteredTickets(tickets)
+      // Sort by ID descending (newest first) when search is empty
+      processed.sort((a, b) => {
+        const idA = a.id
+        const idB = b.id
+        // Extract numeric part from ID (e.g., "AGV-910" → 910)
+        const numA = parseInt(idA.split('-')[1] || '0', 10)
+        const numB = parseInt(idB.split('-')[1] || '0', 10)
+        return numB - numA // Descending: higher numbers first
+      })
+      setFilteredTickets(processed)
     } else {
       const query = search.toLowerCase()
-      const filtered = tickets.filter(t =>
-        t.id.toLowerCase().includes(query) ||
-        t.summary.toLowerCase().includes(query) ||
-        t.type.toLowerCase().includes(query)
-      )
+
+      // Filter and score all tickets
+      const filtered = tickets
+        .map((t) => {
+          let relevanceScore = 0
+
+          // ID matching (highest priority - most specific field)
+          if (t.id.toLowerCase() === query) {
+            relevanceScore += 1000 // Exact match
+          } else if (t.id.toLowerCase().startsWith(query)) {
+            relevanceScore += 800 // Starts with query (e.g., "AGV-9" matches "AGV-910")
+          } else if (t.id.toLowerCase().includes(query)) {
+            relevanceScore += 600 // Contains query anywhere (e.g., "910" matches "AGV-910")
+          }
+
+          // Summary/title matching (high priority)
+          if (t.summary && t.summary.toLowerCase().includes(query)) {
+            relevanceScore += 400
+          }
+
+          // Type matching (medium priority)
+          if (t.type && t.type.toLowerCase().includes(query)) {
+            relevanceScore += 200
+          }
+
+          // Priority matching (lower priority)
+          if (t.priority && t.priority.toLowerCase().includes(query)) {
+            relevanceScore += 100
+          }
+
+          // Sprints matching (lower priority)
+          if (t.sprints && t.sprints.some((s: string) => s.toLowerCase().includes(query))) {
+            relevanceScore += 100
+          }
+
+          return { ticket: t, score: relevanceScore }
+        })
+        .filter((item) => item.score > 0) // Only include tickets with at least one match
+        .sort((a, b) => b.score - a.score) // Sort by relevance score (highest first)
+        .map((item) => item.ticket) // Extract ticket objects
+
       setFilteredTickets(filtered)
     }
+
     setSelectedIndex(0)
+    // Scroll results container to top when search changes or results update
     if (resultsContainerRef.current) {
       resultsContainerRef.current.scrollTop = 0
     }
