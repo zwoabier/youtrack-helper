@@ -1,5 +1,870 @@
 [
   {
+    "id": "AGV-932",
+    "summary": "BE: Make Dealer Information not required in Bikeshield when creating a claim",
+    "type": "User Story",
+    "priority": "Major",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-932"
+  },
+  {
+    "id": "AGV-473",
+    "summary": "Command \"SEND_JSON\": Set “Reported to ERGO” after JSON email is sent",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-473"
+  },
+  {
+    "id": "AGV-877",
+    "summary": "Pain Points in manual AGAV Termination Process",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_22",
+      "AGV_Sprint_23",
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-877"
+  },
+  {
+    "id": "AGV-964",
+    "summary": "Kafka Sync CRM field emailaddress1",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-964"
+  },
+  {
+    "id": "AGV-962",
+    "summary": "(Placeholder) BE: Add Commands ",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-962"
+  },
+  {
+    "id": "AGV-963",
+    "summary": "(Placeholder) BE: Add new templates",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-963"
+  },
+  {
+    "id": "AGV-470",
+    "summary": "Automation Phase 1",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint13",
+      "Sprint_14",
+      "AGV_Sprint15",
+      "AGV_Sprint16",
+      "AGV_Sprint17",
+      "AGV_Sprint18",
+      "AGV_Sprint19",
+      "AGV_Sprint20",
+      "AGV_Sprint21",
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-470"
+  },
+  {
+    "id": "AGV-959",
+    "summary": "(Placeholder) BE: Migration of phase/ stage old to new claims",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-959"
+  },
+  {
+    "id": "AGV-960",
+    "summary": "(Placeholder) BE: Adjustment of process definition",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-960"
+  },
+  {
+    "id": "AGV-961",
+    "summary": "(Placeholder) BE: Adjust Checks in CLAIM_CHECK",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-961"
+  },
+  {
+    "id": "AGV-668",
+    "summary": "AWAIT_INSURANCE_RESPONSE",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog",
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-668"
+  },
+  {
+    "id": "AGV-920",
+    "summary": "Claim Settlement",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog",
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-920"
+  },
+  {
+    "id": "AGV-758",
+    "summary": "HANDLE_SETTLEMENT_RESPONE",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog",
+      "AGV_Sprint_24"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-758"
+  },
+  {
+    "id": "AGV-825",
+    "summary": "Enabler Ticket: Field “Wichtige Hinweise Schadenbearbeitung” ",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-825"
+  },
+  {
+    "id": "AGV-772",
+    "summary": "Add validation for document file names",
+    "type": "Bug (Blocking)",
+    "priority": "High-priority",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-772"
+  },
+  {
+    "id": "AGV-866",
+    "summary": "TEST Ticket 1 for EPIC 1",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": null,
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-866"
+  },
+  {
+    "id": "AGV-19",
+    "summary": "CRM ",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint02",
+      "AGV_Sprint03",
+      "AGV_Sprint04",
+      "AGV_Sprint05",
+      "AGV-Sprint06",
+      "AGV_Sprint07",
+      "AGV_Sprint10",
+      "AGV_Sprint11",
+      "AGV_Sprint12",
+      "AGV_Sprint13",
+      "Sprint_14",
+      "AGV_Sprint15",
+      "AGV_Sprint16",
+      "AGV_Sprint17",
+      "AGV_Sprint18",
+      "AGV_Sprint19",
+      "AGV_Sprint20",
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-19"
+  },
+  {
+    "id": "AGV-948",
+    "summary": "FE: Adjust Right Side of Claim View – Introduce Dynamic Panel Resize",
+    "type": "User Story",
+    "priority": "Minor",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-948"
+  },
+  {
+    "id": "AGV-952",
+    "summary": "[FE]: Adjust CRM links",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-952"
+  },
+  {
+    "id": "AGV-958",
+    "summary": "[FE]: Adjust document types",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-958"
+  },
+  {
+    "id": "AGV-885",
+    "summary": "Backend Does Not Persist Deletion of Termination Date",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_22",
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-885"
+  },
+  {
+    "id": "AGV-607",
+    "summary": "Command \"FILL_SETTLEMENT_DATE_AND_SEND_EMAIL_TO_EMPLOYER\": Extract Damagenumber from ERGO Response",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_22",
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-607"
+  },
+  {
+    "id": "AGV-954",
+    "summary": "Production investigation for non-forwarded emails",
+    "type": "Task",
+    "priority": "High-priority",
+    "sprints": null,
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-954"
+  },
+  {
+    "id": "AGV-910",
+    "summary": "Calculate \"Ablöse zum\" date correctly",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-910"
+  },
+  {
+    "id": "AGV-941",
+    "summary": "BE: Clear calculated buyoutdetails in Bikeshield and CRM",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-941"
+  },
+  {
+    "id": "AGV-942",
+    "summary": "Portal: Load existing bikereturn Date in Dealerportal and make it read only",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-942"
+  },
+  {
+    "id": "AGV-646",
+    "summary": "Check Bike Return PDF",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-646"
+  },
+  {
+    "id": "AGV-644",
+    "summary": "Check Validity of Documents",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-644"
+  },
+  {
+    "id": "AGV-628",
+    "summary": "Command: Send Missing Documents Mail",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-628"
+  },
+  {
+    "id": "AGV-629",
+    "summary": "Command: Send Rejection Mail",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-629"
+  },
+  {
+    "id": "AGV-658",
+    "summary": "Analyse workflows for claim Long-time illness",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-658"
+  },
+  {
+    "id": "AGV-318",
+    "summary": "Refactor IsBikeshieldClaim custom action",
+    "type": "Task",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-318"
+  },
+  {
+    "id": "AGV-667",
+    "summary": "Hide/ disable email generation in CRM for BikeShield-originated claim emails",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-667"
+  },
+  {
+    "id": "AGV-317",
+    "summary": "Add new key Source to Bikeshield Feature flags",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-317"
+  },
+  {
+    "id": "AGV-828",
+    "summary": "Ensure that form is locked when AGV damage claim prefix is related to long-term illness",
+    "type": "Task",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-828"
+  },
+  {
+    "id": "AGV-103",
+    "summary": "Portal : Move Claim Details from Modal to Page",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-103"
+  },
+  {
+    "id": "AGV-732",
+    "summary": "[Portal] Add new key Source to Bikeshield Feature flags",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-732"
+  },
+  {
+    "id": "AGV-126",
+    "summary": "Clean up after refactoring",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-126"
+  },
+  {
+    "id": "AGV-857",
+    "summary": "Test Ticket for AGV_Sprint_22",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-857"
+  },
+  {
+    "id": "AGV-798",
+    "summary": "Display “Number of Bikes” in Bikeshield",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-798"
+  },
+  {
+    "id": "AGV-802",
+    "summary": "Implement Reminder Check Logic for Bike Return",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-802"
+  },
+  {
+    "id": "AGV-627",
+    "summary": "Command: Send Reminder Bike Return",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-627"
+  },
+  {
+    "id": "AGV-222",
+    "summary": "[FE] Edit Role modal stays open after an error, unlike successful save behavior",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-222"
+  },
+  {
+    "id": "AGV-707",
+    "summary": "Ability to change AI Service (besides Bedrock)",
+    "type": "User Story",
+    "priority": "Planning",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-707"
+  },
+  {
+    "id": "AGV-683",
+    "summary": "Improve search Function – Exact Match for Task list",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-683"
+  },
+  {
+    "id": "AGV-531",
+    "summary": "Save Customer Filters in seperate view",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-531"
+  },
+  {
+    "id": "AGV-513",
+    "summary": "Enable Forwarding of Sent Emails",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-513"
+  },
+  {
+    "id": "AGV-520",
+    "summary": "Notes on Task Level \u0026 Task Reference",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-520"
+  },
+  {
+    "id": "AGV-522",
+    "summary": "Automatic SharePoint Upload Integration",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-522"
+  },
+  {
+    "id": "AGV-523",
+    "summary": "Add cc line in email composer",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-523"
+  },
+  {
+    "id": "AGV-524",
+    "summary": "Display Recently Edited Claims",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-524"
+  },
+  {
+    "id": "AGV-514",
+    "summary": "Save Email Drafts",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-514"
+  },
+  {
+    "id": "AGV-519",
+    "summary": "Pin Notes",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-519"
+  },
+  {
+    "id": "AGV-805",
+    "summary": "PDF field is wrongly populated",
+    "type": "Investigation",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-805"
+  },
+  {
+    "id": "AGV-768",
+    "summary": "FULL_DOCS_CHECK",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-768"
+  },
+  {
+    "id": "AGV-569",
+    "summary": "Document extraction API",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint16",
+      "AGV_Sprint17",
+      "AGV_Sprint18",
+      "AGV_Sprint19",
+      "AGV_Sprint20",
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-569"
+  },
+  {
+    "id": "AGV-829",
+    "summary": "Check confirm return process (portal - Bikeshield - CRM)",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-829"
+  },
+  {
+    "id": "AGV-784",
+    "summary": "[FE]: Adjustments",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-784"
+  },
+  {
+    "id": "AGV-840",
+    "summary": "Adjustment Document Extraction View",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-840"
+  },
+  {
+    "id": "AGV-853",
+    "summary": "ISO 27001 : Secure Development Checklist",
+    "type": "Task",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-853"
+  },
+  {
+    "id": "AGV-776",
+    "summary": "Loading problems when opening new claims",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-776"
+  },
+  {
+    "id": "AGV-592",
+    "summary": "Consume document-extracted.event.v1 (Receiver on BikeShield)",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-592"
+  },
+  {
+    "id": "AGV-574",
+    "summary": "AI Service integration (AWS Bedrock)",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-574"
+  },
+  {
+    "id": "AGV-796",
+    "summary": "Scheduler for check retries",
+    "type": "Task",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-796"
+  },
+  {
+    "id": "AGV-762",
+    "summary": "Command CALCULATE_BUYOUT_DATE_AND_SEND_JSON is not triggering email dispatch",
+    "type": "Bug (Blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-762"
+  },
+  {
+    "id": "AGV-856",
+    "summary": "[docX] - documentType is missing on kafka message",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-856"
+  },
+  {
+    "id": "AGV-859",
+    "summary": "[docX] Prepare internal bedrock mocking for e2e tests",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-859"
+  },
+  {
+    "id": "AGV-786",
+    "summary": "Longlived API Tokens?",
+    "type": "Investigation",
+    "priority": "Planning",
+    "sprints": [
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-786"
+  },
+  {
+    "id": "AGV-184",
+    "summary": "Bug (Blocking)",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint04",
+      "AGV_Sprint05",
+      "AGV-Sprint06",
+      "AGV_Sprint07",
+      "AGV_Sprint10",
+      "AGV_Sprint11",
+      "AGV_Sprint12",
+      "AGV_Sprint13",
+      "Sprint_14",
+      "AGV_Sprint15",
+      "AGV_Sprint16",
+      "AGV_Sprint17",
+      "AGV_Sprint18",
+      "AGV_Sprint19",
+      "AGV_Sprint20",
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-184"
+  },
+  {
+    "id": "AGV-399",
+    "summary": "MVP Fixes \u0026 Change Requests",
+    "type": "Epic",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint11",
+      "AGV_Sprint12",
+      "AGV_Sprint13",
+      "Sprint_14",
+      "AGV_Sprint15",
+      "AGV_Sprint16",
+      "AGV_Sprint17",
+      "AGV_Sprint18",
+      "AGV_Sprint19",
+      "AGV_Sprint20",
+      "AGV_Sprint21",
+      "AGV_Backlog"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-399"
+  },
+  {
+    "id": "AGV-544",
+    "summary": "Fix failing contract tests caused by Dependabot PR",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-544"
+  },
+  {
+    "id": "AGV-535",
+    "summary": "Rename ambiguous endpoint api/v1/claims/{claim-id}/lock/status",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-535"
+  },
+  {
+    "id": "AGV-681",
+    "summary": "Exploratory testing in Bikeshield",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-681"
+  },
+  {
+    "id": "AGV-831",
+    "summary": "Show only manual tasks by default",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-831"
+  },
+  {
+    "id": "AGV-832",
+    "summary": "Filter tasks by manual vs. automated",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-832"
+  },
+  {
+    "id": "AGV-833",
+    "summary": "Label system for task types",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-833"
+  },
+  {
+    "id": "AGV-834",
+    "summary": "Remove non-implemented check IDs from process definitions",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-834"
+  },
+  {
+    "id": "AGV-835",
+    "summary": "Add automation metadata to process definitions",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-835"
+  },
+  {
+    "id": "AGV-836",
+    "summary": "Automatic fallback to manual processing on dueDate expiry",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-836"
+  },
+  {
+    "id": "AGV-838",
+    "summary": "*In Klärung* news tile on portal",
+    "type": "User Story",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint21"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-838"
+  },
+  {
     "id": "AGV-775",
     "summary": "Claim number counts up in case of INVALID_REQUEST",
     "type": "Bug (Non-blocking)",
@@ -264,36 +1129,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-865"
   },
   {
-    "id": "AGV-942",
-    "summary": "Portal: Load existing bikereturn Date in Dealerportal and make it read only",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-942"
-  },
-  {
-    "id": "AGV-941",
-    "summary": "BE: Clear calculated buyoutdetails in Bikeshield and CRM",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-941"
-  },
-  {
-    "id": "AGV-910",
-    "summary": "Calculate \"Ablöse zum\" date correctly",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-910"
-  },
-  {
     "id": "AGV-918",
     "summary": "Jupiter: Add Consumer for fields",
     "type": "User Story",
@@ -302,48 +1137,6 @@
       "AGV_Sprint_23"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-918"
-  },
-  {
-    "id": "AGV-607",
-    "summary": "Command \"FILL_SETTLEMENT_DATE_AND_SEND_EMAIL_TO_EMPLOYER\": Extract Damagenumber from ERGO Response",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_22",
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-607"
-  },
-  {
-    "id": "AGV-885",
-    "summary": "Backend Does Not Persist Deletion of Termination Date",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_22",
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-885"
-  },
-  {
-    "id": "AGV-948",
-    "summary": "FE: Adjust Right Side of Claim View – Introduce Dynamic Panel Resize",
-    "type": "User Story",
-    "priority": "Minor",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-948"
-  },
-  {
-    "id": "AGV-952",
-    "summary": "[FE]: Adjust CRM links",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-952"
   },
   {
     "id": "AGV-852",
@@ -394,16 +1187,6 @@
       "AGV_Sprint_23"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-892"
-  },
-  {
-    "id": "AGV-825",
-    "summary": "Enabler Ticket: Field “Wichtige Hinweise Schadenbearbeitung” ",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-825"
   },
   {
     "id": "AGV-550",
@@ -466,16 +1249,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-763"
   },
   {
-    "id": "AGV-958",
-    "summary": "[FE]: Adjust document types",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-958"
-  },
-  {
     "id": "AGV-905",
     "summary": "CRM – Map “asc_datum” to “LLE Stop Date”",
     "type": "User Story",
@@ -502,16 +1275,6 @@
       "AGV_Sprint21"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-888"
-  },
-  {
-    "id": "AGV-786",
-    "summary": "Longlived API Tokens?",
-    "type": "Investigation",
-    "priority": "Planning",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-786"
   },
   {
     "id": "AGV-830",
@@ -796,39 +1559,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-752"
   },
   {
-    "id": "AGV-859",
-    "summary": "[docX] Prepare internal bedrock mocking for e2e tests",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-859"
-  },
-  {
-    "id": "AGV-856",
-    "summary": "[docX] - documentType is missing on kafka message",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-856"
-  },
-  {
-    "id": "AGV-762",
-    "summary": "Command CALCULATE_BUYOUT_DATE_AND_SEND_JSON is not triggering email dispatch",
-    "type": "Bug (Blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-762"
-  },
-  {
     "id": "AGV-697",
     "summary": "API-Versioning",
     "type": "User Story",
@@ -849,27 +1579,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-696"
   },
   {
-    "id": "AGV-796",
-    "summary": "Scheduler for check retries",
-    "type": "Task",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-796"
-  },
-  {
-    "id": "AGV-574",
-    "summary": "AI Service integration (AWS Bedrock)",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-574"
-  },
-  {
     "id": "AGV-435",
     "summary": "Extend the permission checks",
     "type": "Task",
@@ -878,16 +1587,6 @@
       "AGV_Sprint21"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-435"
-  },
-  {
-    "id": "AGV-592",
-    "summary": "Consume document-extracted.event.v1 (Receiver on BikeShield)",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-592"
   },
   {
     "id": "AGV-766",
@@ -900,16 +1599,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-766"
   },
   {
-    "id": "AGV-776",
-    "summary": "Loading problems when opening new claims",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-776"
-  },
-  {
     "id": "AGV-793",
     "summary": "Spike: Evaluate Datadog Error Tracking for Portal",
     "type": "Spike",
@@ -918,26 +1607,6 @@
       "AGV_Backlog"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-793"
-  },
-  {
-    "id": "AGV-853",
-    "summary": "ISO 27001 : Secure Development Checklist",
-    "type": "Task",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-853"
-  },
-  {
-    "id": "AGV-840",
-    "summary": "Adjustment Document Extraction View",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-840"
   },
   {
     "id": "AGV-876",
@@ -950,26 +1619,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-876"
   },
   {
-    "id": "AGV-784",
-    "summary": "[FE]: Adjustments",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-784"
-  },
-  {
-    "id": "AGV-829",
-    "summary": "Check confirm return process (portal - Bikeshield - CRM)",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-829"
-  },
-  {
     "id": "AGV-760",
     "summary": "500 when creating a claim with documents",
     "type": "Bug (Blocking)",
@@ -980,42 +1629,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-760"
   },
   {
-    "id": "AGV-569",
-    "summary": "Document extraction API",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint16",
-      "AGV_Sprint17",
-      "AGV_Sprint18",
-      "AGV_Sprint19",
-      "AGV_Sprint20",
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-569"
-  },
-  {
-    "id": "AGV-932",
-    "summary": "BE: Make Dealer Information not required in Bikeshield when creating a claim",
-    "type": "User Story",
-    "priority": "Major",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-932"
-  },
-  {
-    "id": "AGV-772",
-    "summary": "Add validation for document file names",
-    "type": "Bug (Blocking)",
-    "priority": "High-priority",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-772"
-  },
-  {
     "id": "AGV-882",
     "summary": "FE: Allow Editing for Closed Claims",
     "type": "User Story",
@@ -1024,18 +1637,6 @@
       "AGV_Backlog"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-882"
-  },
-  {
-    "id": "AGV-877",
-    "summary": "Pain Points in manual AGAV Termination Process",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_22",
-      "AGV_Sprint_23",
-      "AGV_Sprint_24"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-877"
   },
   {
     "id": "AGV-956",
@@ -1056,51 +1657,6 @@
       "AGV_Sprint_24"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-955"
-  },
-  {
-    "id": "AGV-470",
-    "summary": "Automation Phase 1",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint13",
-      "Sprint_14",
-      "AGV_Sprint15",
-      "AGV_Sprint16",
-      "AGV_Sprint17",
-      "AGV_Sprint18",
-      "AGV_Sprint19",
-      "AGV_Sprint20",
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-470"
-  },
-  {
-    "id": "AGV-19",
-    "summary": "CRM ",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint02",
-      "AGV_Sprint03",
-      "AGV_Sprint04",
-      "AGV_Sprint05",
-      "AGV-Sprint06",
-      "AGV_Sprint07",
-      "AGV_Sprint10",
-      "AGV_Sprint11",
-      "AGV_Sprint12",
-      "AGV_Sprint13",
-      "Sprint_14",
-      "AGV_Sprint15",
-      "AGV_Sprint16",
-      "AGV_Sprint17",
-      "AGV_Sprint18",
-      "AGV_Sprint19",
-      "AGV_Sprint20",
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-19"
   },
   {
     "id": "AGV-860",
@@ -1153,31 +1709,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-851"
   },
   {
-    "id": "AGV-184",
-    "summary": "Bug (Blocking)",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint04",
-      "AGV_Sprint05",
-      "AGV-Sprint06",
-      "AGV_Sprint07",
-      "AGV_Sprint10",
-      "AGV_Sprint11",
-      "AGV_Sprint12",
-      "AGV_Sprint13",
-      "Sprint_14",
-      "AGV_Sprint15",
-      "AGV_Sprint16",
-      "AGV_Sprint17",
-      "AGV_Sprint18",
-      "AGV_Sprint19",
-      "AGV_Sprint20",
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-184"
-  },
-  {
     "id": "AGV-777",
     "summary": "Start automation after task is advanced",
     "type": "Task",
@@ -1196,27 +1727,6 @@
       "AGV_Sprint21"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-820"
-  },
-  {
-    "id": "AGV-399",
-    "summary": "MVP Fixes \u0026 Change Requests",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint11",
-      "AGV_Sprint12",
-      "AGV_Sprint13",
-      "Sprint_14",
-      "AGV_Sprint15",
-      "AGV_Sprint16",
-      "AGV_Sprint17",
-      "AGV_Sprint18",
-      "AGV_Sprint19",
-      "AGV_Sprint20",
-      "AGV_Sprint21",
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-399"
   },
   {
     "id": "AGV-792",
@@ -1259,14 +1769,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-743"
   },
   {
-    "id": "AGV-954",
-    "summary": "Production investigation for non-forwarded emails",
-    "type": "Task",
-    "priority": "High-priority",
-    "sprints": null,
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-954"
-  },
-  {
     "id": "AGV-953",
     "summary": "BE: Last Interaction Type – Logic \u0026 Data Model",
     "type": "User Story",
@@ -1305,16 +1807,6 @@
       "AGV_Sprint_22"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-903"
-  },
-  {
-    "id": "AGV-866",
-    "summary": "TEST Ticket 1 for EPIC 1",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_24"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-866"
   },
   {
     "id": "AGV-861",
@@ -1526,16 +2018,6 @@
       "AGV_Sprint_22"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-506"
-  },
-  {
-    "id": "AGV-473",
-    "summary": "Command \"SEND_JSON\": Set “Reported to ERGO” after JSON email is sent",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_24"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-473"
   },
   {
     "id": "AGV-950",
@@ -1856,17 +2338,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-873"
   },
   {
-    "id": "AGV-920",
-    "summary": "Claim Settlement",
-    "type": "Epic",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog",
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-920"
-  },
-  {
     "id": "AGV-925",
     "summary": "[e2e] Initial step towards non-mocked E2E",
     "type": "User Story",
@@ -1888,26 +2359,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-183"
   },
   {
-    "id": "AGV-758",
-    "summary": "HANDLE_SETTLEMENT_RESPONE",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-758"
-  },
-  {
-    "id": "AGV-668",
-    "summary": "AWAIT_INSURANCE_RESPONSE",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-668"
-  },
-  {
     "id": "AGV-47",
     "summary": "US: Insolvency Check Notification in Claim Screen",
     "type": "User Story",
@@ -1924,16 +2375,6 @@
     "priority": "High-priority",
     "sprints": null,
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-908"
-  },
-  {
-    "id": "AGV-768",
-    "summary": "FULL_DOCS_CHECK",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-768"
   },
   {
     "id": "AGV-803",
@@ -2016,246 +2457,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-898"
   },
   {
-    "id": "AGV-805",
-    "summary": "PDF field is wrongly populated",
-    "type": "Investigation",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-805"
-  },
-  {
-    "id": "AGV-519",
-    "summary": "Pin Notes",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-519"
-  },
-  {
-    "id": "AGV-514",
-    "summary": "Save Email Drafts",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-514"
-  },
-  {
-    "id": "AGV-524",
-    "summary": "Display Recently Edited Claims",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-524"
-  },
-  {
-    "id": "AGV-523",
-    "summary": "Add cc line in email composer",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-523"
-  },
-  {
-    "id": "AGV-522",
-    "summary": "Automatic SharePoint Upload Integration",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-522"
-  },
-  {
-    "id": "AGV-520",
-    "summary": "Notes on Task Level \u0026 Task Reference",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-520"
-  },
-  {
-    "id": "AGV-513",
-    "summary": "Enable Forwarding of Sent Emails",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-513"
-  },
-  {
-    "id": "AGV-531",
-    "summary": "Save Customer Filters in seperate view",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-531"
-  },
-  {
-    "id": "AGV-683",
-    "summary": "Improve search Function – Exact Match for Task list",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-683"
-  },
-  {
-    "id": "AGV-222",
-    "summary": "[FE] Edit Role modal stays open after an error, unlike successful save behavior",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-222"
-  },
-  {
-    "id": "AGV-707",
-    "summary": "Ability to change AI Service (besides Bedrock)",
-    "type": "User Story",
-    "priority": "Planning",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-707"
-  },
-  {
-    "id": "AGV-646",
-    "summary": "Check Bike Return PDF",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-646"
-  },
-  {
-    "id": "AGV-644",
-    "summary": "Check Validity of Documents",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-644"
-  },
-  {
-    "id": "AGV-628",
-    "summary": "Command: Send Missing Documents Mail",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-628"
-  },
-  {
-    "id": "AGV-629",
-    "summary": "Command: Send Rejection Mail",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-629"
-  },
-  {
-    "id": "AGV-658",
-    "summary": "Analyse workflows for claim Long-time illness",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-658"
-  },
-  {
-    "id": "AGV-318",
-    "summary": "Refactor IsBikeshieldClaim custom action",
-    "type": "Task",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-318"
-  },
-  {
-    "id": "AGV-317",
-    "summary": "Add new key Source to Bikeshield Feature flags",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-317"
-  },
-  {
-    "id": "AGV-828",
-    "summary": "Ensure that form is locked when AGV damage claim prefix is related to long-term illness",
-    "type": "Task",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-828"
-  },
-  {
-    "id": "AGV-667",
-    "summary": "Hide/ disable email generation in CRM for BikeShield-originated claim emails",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-667"
-  },
-  {
-    "id": "AGV-103",
-    "summary": "Portal : Move Claim Details from Modal to Page",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-103"
-  },
-  {
-    "id": "AGV-732",
-    "summary": "[Portal] Add new key Source to Bikeshield Feature flags",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-732"
-  },
-  {
-    "id": "AGV-126",
-    "summary": "Clean up after refactoring",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-126"
-  },
-  {
     "id": "AGV-754",
     "summary": "Process Results",
     "type": "User Story",
@@ -2274,46 +2475,6 @@
       "AGV_Sprint21"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-821"
-  },
-  {
-    "id": "AGV-857",
-    "summary": "Test Ticket for AGV_Sprint_22",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-857"
-  },
-  {
-    "id": "AGV-798",
-    "summary": "Display “Number of Bikes” in Bikeshield",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-798"
-  },
-  {
-    "id": "AGV-802",
-    "summary": "Implement Reminder Check Logic for Bike Return",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-802"
-  },
-  {
-    "id": "AGV-627",
-    "summary": "Command: Send Reminder Bike Return",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Backlog"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-627"
   },
   {
     "id": "AGV-426",
@@ -2941,16 +3102,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-494"
   },
   {
-    "id": "AGV-544",
-    "summary": "Fix failing contract tests caused by Dependabot PR",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-544"
-  },
-  {
     "id": "AGV-551",
     "summary": "Cannot identify or access attachments for individual emails in a conversation",
     "type": "Bug (Non-blocking)",
@@ -3077,16 +3228,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-653"
   },
   {
-    "id": "AGV-535",
-    "summary": "Rename ambiguous endpoint api/v1/claims/{claim-id}/lock/status",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-535"
-  },
-  {
     "id": "AGV-461",
     "summary": "400 bad request [globalSearch]",
     "type": "Bug (Non-blocking)",
@@ -3211,16 +3352,6 @@
       "AGV_Sprint18"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-654"
-  },
-  {
-    "id": "AGV-681",
-    "summary": "Exploratory testing in Bikeshield",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-681"
   },
   {
     "id": "AGV-791",
@@ -3749,76 +3880,6 @@
       "AGV_Sprint21"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-755"
-  },
-  {
-    "id": "AGV-838",
-    "summary": "*In Klärung* news tile on portal",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-838"
-  },
-  {
-    "id": "AGV-836",
-    "summary": "Automatic fallback to manual processing on dueDate expiry",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-836"
-  },
-  {
-    "id": "AGV-835",
-    "summary": "Add automation metadata to process definitions",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-835"
-  },
-  {
-    "id": "AGV-834",
-    "summary": "Remove non-implemented check IDs from process definitions",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-834"
-  },
-  {
-    "id": "AGV-833",
-    "summary": "Label system for task types",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-833"
-  },
-  {
-    "id": "AGV-832",
-    "summary": "Filter tasks by manual vs. automated",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-832"
-  },
-  {
-    "id": "AGV-831",
-    "summary": "Show only manual tasks by default",
-    "type": "User Story",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint21"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-831"
   },
   {
     "id": "AGV-787",

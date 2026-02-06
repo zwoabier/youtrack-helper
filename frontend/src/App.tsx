@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Search } from 'lucide-react';
 import { main } from 'wailsjs/go/models';
 import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
 import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_STYLES } from '@/utils/theme';
@@ -188,70 +188,100 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
   };
 
   return (
-    <CommandMenu>
-      <CommandPrimitive.Input
-        ref={inputRef}
-        value={search}
-        onValueChange={setSearch}
-        placeholder="Search YouTrack tickets..."
-        className={`h-12 w-full border-none ${THEME_TAILWIND.bgSurface} px-4 py-3 text-lg outline-none ${THEME_TAILWIND.textPrimary}`}
-        autoFocus
-      />
-      <CommandPrimitive.List
-        ref={resultsContainerRef}
-        className="max-h-[300px] overflow-y-auto"
-      >
+    <div className={`h-screen w-screen ${THEME_TAILWIND.bgBase} flex flex-col overflow-hidden`}>
+      {/* Search Input */}
+      <div className={`p-4 ${THEME_TAILWIND.borderBottom}`}>
+        <div className={`flex items-center gap-2 ${THEME_TAILWIND.bgSurface} rounded-lg px-3 py-2 border border-[hsl(var(--color-border))]`}>
+          <Search size={18} className={THEME_TAILWIND.textSecondary} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search tickets..."
+            className={`flex-1 ${THEME_TAILWIND.bgSurface} outline-none ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
+            autoFocus
+          />
+        </div>
+      </div>
+
+      {/* Results List */}
+      <div ref={resultsContainerRef} className="flex-1 overflow-y-auto">
         {filteredTickets.length === 0 ? (
-          <CommandPrimitive.Empty className={THEME_TAILWIND.textSecondary}>No results found.</CommandPrimitive.Empty>
+          <div className={`flex items-center justify-center h-full ${THEME_TAILWIND.textSecondary} p-4`}>
+            No tickets found
+          </div>
         ) : (
-          <div className={`text-xs ${THEME_TAILWIND.textSecondary} px-4 py-2`}>
-            Showing {filteredTickets.length} result{filteredTickets.length !== 1 ? "s" : ""}
+          <div>
+            {filteredTickets.map((ticket, index) => (
+              <div
+                key={ticket.id}
+                ref={index === selectedIndex ? selectedItemRef : null}
+                onClick={() => handleTicketSelect(ticket)}
+                className={cn(
+                  `px-4 py-3 cursor-pointer transition-colors border-l-3 border-l-transparent`,
+                  index === selectedIndex
+                    ? `${THEME_TAILWIND.bgHover} border-l-[hsl(var(--color-accent-bright))]`
+                    : `hover:${THEME_TAILWIND.bgHover}`
+                )}
+              >
+                {/* Header: ID, Type Badge, Priority Badge */}
+                <div className="flex items-center gap-3 mb-2">
+                  <span className={`font-bold min-w-fit ${THEME_TAILWIND.accent}`}>
+                    {ticket.id}
+                  </span>
+                  
+                  {/* Type Badge */}
+                  <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-[hsl(var(--color-accent)_/_20%)] text-[hsl(var(--color-accent-bright))]">
+                    {ticket.type || 'Unknown'}
+                  </span>
+
+                  {/* Priority Badge */}
+                  <span className={cn(
+                    'inline-block px-2 py-1 rounded text-xs font-medium ml-auto',
+                    ticket.priority === 'Critical' && 'bg-[hsl(var(--color-critical)_/_20%)] text-[hsl(var(--color-critical))]',
+                    ticket.priority === 'High' && 'bg-[hsl(var(--color-high)_/_20%)] text-[hsl(var(--color-high))]',
+                    ticket.priority === 'Major' && 'bg-[hsl(var(--color-major)_/_20%)] text-[hsl(var(--color-major))]',
+                    ticket.priority === 'Normal' && 'bg-[hsl(var(--color-normal)_/_20%)] text-[hsl(var(--color-normal))]',
+                    ticket.priority === 'Medium' && 'bg-[hsl(var(--color-major)_/_20%)] text-[hsl(var(--color-major))]',
+                    ticket.priority === 'Low' && 'bg-[hsl(var(--color-normal)_/_20%)] text-[hsl(var(--color-normal))]',
+                    !ticket.priority && 'bg-[hsl(var(--color-text-secondary)_/_20%)] text-[hsl(var(--color-text-secondary))]'
+                  )}>
+                    {ticket.priority || '—'}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <div className="mb-2">
+                  <p className={`${THEME_TAILWIND.textPrimary} text-sm leading-5`}>
+                    {ticket.summary}
+                  </p>
+                </div>
+
+                {/* Sprints */}
+                {ticket.sprints && ticket.sprints.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {ticket.sprints.map((sprint: string) => (
+                      <span
+                        key={sprint}
+                        className={`inline-block px-2 py-1 border border-[hsl(var(--color-border))] rounded text-xs ${THEME_TAILWIND.textSecondary}`}
+                      >
+                        {sprint}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
-        {filteredTickets.map((ticket, index) => (
-          <div
-            key={ticket.id}
-            ref={index === selectedIndex ? selectedItemRef : null}
-            onClick={() => handleTicketSelect(ticket)}
-            className={cn(
-              `flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors border-l-3 border-l-transparent`,
-              index === selectedIndex
-                ? `bg-[hsl(var(--color-bg-hover))] border-l-[hsl(var(--color-accent-bright))]`
-                : `hover:bg-[hsl(var(--color-bg-hover))]`
-            )}
-          >
-            <div className={`flex flex-col flex-grow group ${THEME_TAILWIND.textPrimary}`}>
-              <div className="flex justify-between items-center gap-3">
-                <span className={`font-bold ${THEME_TAILWIND.accent} w-24 flex-shrink-0`}>
-                  {ticket.id}
-                </span>
-                <span className={`flex-grow truncate ${THEME_TAILWIND.textPrimary}`}>
-                  {ticket.summary}
-                </span>
-                <span className={`ml-4 text-right flex-shrink-0 ${PRIORITY_TAILWIND[ticket.priority] || PRIORITY_TAILWIND['']}`}>
-                  {ticket.priority}
-                </span>
-              </div>
-              <div className={`flex justify-between items-center text-sm ${THEME_TAILWIND.textSecondary}`}>
-                <span>{ticket.type}</span>
-                <div className="flex space-x-1">
-                  {ticket.sprints && ticket.sprints.length > 0
-                    ? ticket.sprints.map((sprint: string) => (
-                        <span
-                          key={sprint}
-                          className={`px-2 py-0.5 border border-[hsl(var(--color-border))] rounded-full text-xs ${THEME_TAILWIND.textSecondary}`}
-                        >
-                          {sprint}
-                        </span>
-                      ))
-                    : null}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </CommandPrimitive.List>
-    </CommandMenu>
+      </div>
+
+      {/* Keyboard Hints Footer */}
+      <div className={`p-3 border-t border-[hsl(var(--color-border))] text-xs ${THEME_TAILWIND.textSecondary} space-y-1`}>
+        <div>Enter - Copy URL | Shift+Enter - Open in Browser | Esc - Close</div>
+      </div>
+    </div>
   );
 }
 
@@ -407,21 +437,5 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
     </div>
   );
 }
-
-interface CommandMenuProps extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {}
-
-const CommandMenu = React.forwardRef<React.ElementRef<typeof CommandPrimitive>, CommandMenuProps>(
-  ({ className, ...props }, ref) => (
-    <CommandPrimitive
-      ref={ref}
-      className={cn(
-        `flex h-full w-full flex-col overflow-hidden rounded-md ${THEME_TAILWIND.bgElevated}`,
-        className
-      )}
-      {...props}
-    />
-  )
-);
-CommandMenu.displayName = CommandPrimitive.displayName;
 
 export default App;
