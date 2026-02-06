@@ -10,6 +10,8 @@ export function FrontendLog(arg1:string,arg2:Record<string, any>):Promise<void>;
 
 export function GetConfig():Promise<main.Config>;
 
+export function GetCurrentUser(arg1:string,arg2:string):Promise<main.User>;
+
 export function GetTickets():Promise<Array<main.Ticket>>;
 
 export function GetYouTrackToken():Promise<string>;

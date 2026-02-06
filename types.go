@@ -25,3 +25,11 @@ type Project struct {
 	ShortName string `json:"shortName"`
 	Archived  bool   `json:"archived"`
 }
+
+// User represents a YouTrack user returned by the /api/users/me endpoint
+type User struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Type  string `json:"$type"`
+}
