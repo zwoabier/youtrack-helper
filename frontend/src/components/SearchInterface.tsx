@@ -3,6 +3,7 @@ import { Command } from 'cmdk'
 import { Search, Copy, ExternalLink } from 'lucide-react'
 import { TicketItem } from './TicketItem'
 import { GetTickets, HideWindow, OpenInBrowser, CopyToClipboard } from '../../wailsjs/go/main/App'
+import { THEME_TAILWIND } from '@/utils/theme'
 
 interface SearchInterfaceProps {
   onReconfigure: () => void
@@ -225,10 +226,10 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
   const displayedTickets = filteredTickets.slice(0, MAX_RENDER)
 
   return (
-    <div className="h-screen w-screen bg-slate-950 flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-slate-800">
-        <div className="flex items-center gap-2 bg-slate-900 rounded-lg px-3 py-2">
-          <Search size={20} className="text-slate-400" />
+    <div className={`h-screen w-screen ${THEME_TAILWIND.bgBase} flex flex-col overflow-hidden`}>
+      <div className={`p-4 ${THEME_TAILWIND.borderBottom}`}>
+        <div className={`flex items-center gap-2 ${THEME_TAILWIND.bgSurface} rounded-lg px-3 py-2`}>
+          <Search size={20} className={THEME_TAILWIND.textSecondary} />
           <input
             ref={inputRef}
             type="text"
@@ -242,22 +243,22 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
               } catch (err) {}
             }}
             placeholder="Search tickets..."
-            className="flex-1 bg-transparent outline-none text-white placeholder-slate-500"
+            className={`flex-1 ${THEME_TAILWIND.bgSurface} outline-none ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
             autoFocus
           />
         </div>
-        <div className="mt-2 text-xs text-slate-400">
+        <div className={`mt-2 text-xs ${THEME_TAILWIND.textSecondary}`}>
           Tickets: {tickets.length} • Filtered: {filteredTickets.length} • Sample: {filteredTickets.slice(0,5).map(t=>t.id).join(', ')}
         </div>
       </div>
 
       <div ref={resultsContainerRef} className="flex-1 overflow-y-auto">
         {filteredTickets.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-slate-400">
+          <div className={`flex items-center justify-center h-full ${THEME_TAILWIND.textSecondary}`}>
             No tickets found
           </div>
         ) : (
-          <div className="divide-y divide-slate-800">
+          <div className={THEME_TAILWIND.divideY}>
             {displayedTickets.map((ticket, index) => (
               <TicketItem
                 key={ticket.id}
@@ -268,7 +269,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
               />
             ))}
             {filteredTickets.length > MAX_RENDER && (
-              <div className="p-4 text-center text-sm text-slate-400">
+              <div className={`p-4 text-center text-sm ${THEME_TAILWIND.textSecondary}`}>
                 Showing first {MAX_RENDER} of {filteredTickets.length} results
               </div>
             )}
@@ -276,7 +277,7 @@ export function SearchInterface({ onReconfigure }: SearchInterfaceProps) {
         )}
       </div>
 
-      <div className="p-3 border-t border-slate-800 text-xs text-slate-500 space-y-1">
+      <div className={`p-3 border-t border-[hsl(var(--color-border))] text-xs ${THEME_TAILWIND.textSecondary} space-y-1`}>
         <div>Enter - Copy URL | Shift+Enter - Open in Browser | Esc - Close</div>
       </div>
     </div>

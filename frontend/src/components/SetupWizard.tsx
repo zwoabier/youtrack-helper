@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AlertCircle, CheckCircle } from 'lucide-react';
 import { main } from 'wailsjs/go/models';
 import { ValidateYouTrackToken, FetchProjects, SaveYouTrackToken, SaveConfig } from 'wailsjs/go/main/App';
+import { THEME_TAILWIND } from '@/utils/theme';
 
 interface WindowPosition {
   label: string;
@@ -89,17 +90,17 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
   }
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 to-slate-900 p-4">
-      <Card className="w-full max-w-md bg-slate-900 border-slate-800">
+    <div className={`w-screen h-screen flex items-center justify-center bg-gradient-to-br from-[hsl(var(--color-bg-base))] to-[hsl(var(--color-bg-elevated))] p-4`}>
+      <Card className={`w-full max-w-md ${THEME_TAILWIND.bgElevated} ${THEME_TAILWIND.border}`}>
         <CardHeader>
-          <CardTitle className="text-white">YouTrack Helper Setup</CardTitle>
-          <CardDescription className="text-slate-400">Step {step} of 4</CardDescription>
+          <CardTitle className={THEME_TAILWIND.textPrimary}>YouTrack Helper Setup</CardTitle>
+          <CardDescription className={THEME_TAILWIND.textSecondary}>Step {step} of 4</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/50 rounded-lg">
-              <AlertCircle className="w-5 h-5 text-red-500" />
-              <p className="text-sm text-red-400">{error}</p>
+            <div className={`flex items-center gap-2 p-3 bg-[hsl(var(--color-critical)_/_10%)] border border-[hsl(var(--color-critical)_/_50%)] rounded-lg`}>
+              <AlertCircle className={`w-5 h-5 text-[hsl(var(--color-critical))]`} />
+              <p className={`text-sm text-[hsl(var(--color-critical))]`}>{error}</p>
             </div>
           )}
 
@@ -107,19 +108,19 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
           {step === 1 && (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300">YouTrack Base URL</label>
+                <label className={`text-sm font-medium ${THEME_TAILWIND.textPrimary}`}>YouTrack Base URL</label>
                 <Input
                   placeholder="https://myorg.youtrack.cloud"
                   value={baseURL}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBaseURL(e.target.value)}
-                  className="mt-2 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                  className={`mt-2 ${THEME_TAILWIND.bgSurface} ${THEME_TAILWIND.border} ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
                 />
-                <p className="mt-2 text-xs text-slate-400">e.g., https://myorg.youtrack.cloud</p>
+                <p className={`mt-2 text-xs ${THEME_TAILWIND.textSecondary}`}>e.g., https://myorg.youtrack.cloud</p>
               </div>
               <Button
                 onClick={() => baseURL && setStep(2)}
                 disabled={!baseURL}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-[hsl(var(--color-accent-bright))] hover:bg-[hsl(var(--color-accent))]"
               >
                 Continue
               </Button>
@@ -130,28 +131,28 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300">Permanent Token</label>
+                <label className={`text-sm font-medium ${THEME_TAILWIND.textPrimary}`}>Permanent Token</label>
                 <Input
                   placeholder="Enter your YouTrack permanent token"
                   type="password"
                   value={token}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToken(e.target.value)}
-                  className="mt-2 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                  className={`mt-2 ${THEME_TAILWIND.bgSurface} ${THEME_TAILWIND.border} ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
                 />
-                <p className="mt-2 text-xs text-slate-400">Create this in YouTrack settings under API Tokens</p>
+                <p className={`mt-2 text-xs ${THEME_TAILWIND.textSecondary}`}>Create this in YouTrack settings under API Tokens</p>
               </div>
               <div className="flex gap-2">
                 <Button
                   onClick={() => setStep(1)}
                   variant="outline"
-                  className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className={`flex-1 ${THEME_TAILWIND.border} ${THEME_TAILWIND.textSecondary} hover:${THEME_TAILWIND.bgHover}`}
                 >
                   Back
                 </Button>
                 <Button
                   onClick={validateConnection}
                   disabled={!token || isValidating}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-[hsl(var(--color-accent-bright))] hover:bg-[hsl(var(--color-accent))]"
                 >
                   {isValidating ? 'Validating...' : 'Validate'}
                 </Button>
@@ -163,17 +164,17 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
           {step === 3 && (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-3">Select Projects</label>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <label className={`text-sm font-medium ${THEME_TAILWIND.textPrimary} block mb-3`}>Select Projects</label>
+                <div className={`space-y-2 max-h-64 overflow-y-auto`}>
                   {availableProjects.map(p => (
-                    <label key={p.id} className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-800 transition">
+                    <label key={p.id} className={`flex items-center gap-2 cursor-pointer p-2 rounded hover:${THEME_TAILWIND.bgHover} transition`}>
                       <input
                         type="checkbox"
                         checked={projects.includes(p.shortName)}
                         onChange={() => toggleProject(p.shortName)}
-                        className="w-4 h-4 rounded border-slate-600 bg-slate-800"
+                        className={`w-4 h-4 rounded border-[hsl(var(--color-border))] ${THEME_TAILWIND.bgSurface}`}
                       />
-                      <span className="text-sm text-slate-300">{`${p.shortName} — ${p.name}`}</span>
+                      <span className={`text-sm ${THEME_TAILWIND.textPrimary}`}>{`${p.shortName} — ${p.name}`}</span>
                     </label>
                   ))}
                 </div>
@@ -182,14 +183,14 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                 <Button
                   onClick={() => setStep(2)}
                   variant="outline"
-                  className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className={`flex-1 ${THEME_TAILWIND.border} ${THEME_TAILWIND.textSecondary} hover:${THEME_TAILWIND.bgHover}`}
                 >
                   Back
                 </Button>
                 <Button
                   onClick={() => setStep(4)}
                   disabled={projects.length === 0}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-[hsl(var(--color-accent-bright))] hover:bg-[hsl(var(--color-accent))]"
                 >
                   Continue
                 </Button>
@@ -201,11 +202,11 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
           {step === 4 && (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-3">Window Position</label>
+                <label className={`text-sm font-medium ${THEME_TAILWIND.textPrimary} block mb-3`}>Window Position</label>
                 <select
                   value={windowPos}
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setWindowPos(e.target.value)}
-                  className="w-full p-2 bg-slate-800 border border-slate-700 rounded-md text-slate-300"
+                  className={`w-full p-2 ${THEME_TAILWIND.bgSurface} border border-[hsl(var(--color-border))] rounded-md ${THEME_TAILWIND.textPrimary}`}
                 >
                   {WINDOW_POSITIONS.map(pos => (
                     <option key={pos.value} value={pos.value}>
@@ -215,9 +216,9 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                 </select>
               </div>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/50 rounded-lg">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <div className="text-sm text-green-400">
+                <div className={`flex items-center gap-2 p-3 bg-[hsl(var(--color-normal)_/_10%)] border border-[hsl(var(--color-normal)_/_50%)] rounded-lg`}>
+                  <CheckCircle className={`w-5 h-5 text-[hsl(var(--color-normal))]`} />
+                  <div className={`text-sm text-[hsl(var(--color-normal))]`}>
                     <p className="font-medium">Configuration Complete</p>
                     <p className="text-xs mt-1">Selected projects: {projects.join(', ')}</p>
                   </div>
@@ -227,14 +228,14 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
                 <Button
                   onClick={() => setStep(3)}
                   variant="outline"
-                  className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className={`flex-1 ${THEME_TAILWIND.border} ${THEME_TAILWIND.textSecondary} hover:${THEME_TAILWIND.bgHover}`}
                 >
                   Back
                 </Button>
                 <Button
                   onClick={handleComplete}
                   disabled={isLoading}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  className="flex-1 bg-[hsl(var(--color-normal))] hover:bg-[hsl(var(--color-normal))] text-white"
                 >
                   {isLoading ? 'Saving...' : 'Complete Setup'}
                 </Button>

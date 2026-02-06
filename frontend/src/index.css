@@ -4,66 +4,139 @@
 
 @layer base {
   :root {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 210 20% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 20% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 20% 98%;
-
-    --primary: 210 20% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 20% 98%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-
-    --ring: 217.2 32.6% 17.5%;
-
+    /* VS Code Dark Theme Base Colors */
+    --color-bg-base: 0 0% 12%;
+    --color-bg-elevated: 260 3% 18%;
+    --color-bg-surface: 240 2% 15%;
+    --color-bg-hover: 240 4% 25%;
+    --color-bg-active: 204 85% 24%;
+    
+    /* Text Colors */
+    --color-text-primary: 0 0% 80%;
+    --color-text-secondary: 0 0% 52%;
+    --color-text-muted: 0 0% 42%;
+    
+    /* UI Elements */
+    --color-border: 240 4% 25%;
+    --color-input: 240 2% 15%;
+    
+    /* Accent Colors */
+    --color-accent: 204 84% 33%;
+    --color-accent-bright: 204 100% 40%;
+    
+    /* Priority/Type Badge Colors */
+    --color-critical: 10 86% 70%;
+    --color-high: 27 61% 50%;
+    --color-major: 37 100% 71%;
+    --color-normal: 102 29% 47%;
+    
+    /* Card & Component Colors */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 80%;
+    --muted: 240 4% 25%;
+    --muted-foreground: 0 0% 52%;
+    --popover: 260 3% 18%;
+    --popover-foreground: 0 0% 80%;
+    --border: 240 4% 25%;
+    --input: 240 2% 15%;
+    --card: 260 3% 18%;
+    --card-foreground: 0 0% 80%;
+    --primary: 0 0% 80%;
+    --primary-foreground: 0 0% 12%;
+    --secondary: 240 4% 25%;
+    --secondary-foreground: 0 0% 80%;
+    --accent: 204 100% 40%;
+    --accent-foreground: 0 0% 12%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 204 100% 40%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 210 20% 98%;
+    --color-bg-base: 0 0% 12%;
+    --color-bg-elevated: 260 3% 18%;
+    --color-bg-surface: 240 2% 15%;
+    --color-bg-hover: 240 4% 25%;
+    --color-bg-active: 204 85% 24%;
+    
+    --color-text-primary: 0 0% 80%;
+    --color-text-secondary: 0 0% 52%;
+    --color-text-muted: 0 0% 42%;
+    
+    --color-border: 240 4% 25%;
+    --color-input: 240 2% 15%;
+    
+    --color-accent: 204 84% 33%;
+    --color-accent-bright: 204 100% 40%;
+    
+    --color-critical: 10 86% 70%;
+    --color-high: 27 61% 50%;
+    --color-major: 37 100% 71%;
+    --color-normal: 102 29% 47%;
+    
+    --background: 0 0% 12%;
+    --foreground: 0 0% 80%;
+    --muted: 240 4% 25%;
+    --muted-foreground: 0 0% 52%;
+    --popover: 260 3% 18%;
+    --popover-foreground: 0 0% 80%;
+    --border: 240 4% 25%;
+    --input: 240 2% 15%;
+    --card: 260 3% 18%;
+    --card-foreground: 0 0% 80%;
+    --primary: 0 0% 80%;
+    --primary-foreground: 0 0% 12%;
+    --secondary: 240 4% 25%;
+    --secondary-foreground: 0 0% 80%;
+    --accent: 204 100% 40%;
+    --accent-foreground: 0 0% 12%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 204 100% 40%;
+  }
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 20% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 20% 98%;
-
-    --primary: 210 20% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 20% 98%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-
-    --ring: 217.2 32.6% 17.5%;
+  .light-mode {
+    /* Light mode colors - prepared for future use */
+    --color-bg-base: 0 0% 100%;
+    --color-bg-elevated: 0 0% 98%;
+    --color-bg-surface: 0 0% 95%;
+    --color-bg-hover: 0 0% 90%;
+    --color-bg-active: 204 100% 90%;
+    
+    --color-text-primary: 0 0% 20%;
+    --color-text-secondary: 0 0% 48%;
+    --color-text-muted: 0 0% 58%;
+    
+    --color-border: 0 0% 90%;
+    --color-input: 0 0% 95%;
+    
+    --color-accent: 204 84% 45%;
+    --color-accent-bright: 204 100% 40%;
+    
+    --color-critical: 0 100% 50%;
+    --color-high: 27 61% 50%;
+    --color-major: 37 100% 55%;
+    --color-normal: 102 29% 47%;
+    
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 48%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 20%;
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 20%;
+    --primary: 0 0% 20%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 20%;
+    --accent: 204 100% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 204 100% 40%;
   }
 }

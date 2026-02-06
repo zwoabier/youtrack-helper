@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { main } from 'wailsjs/go/models';
 import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
+import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_STYLES } from '@/utils/theme';
 
 interface WindowPosition {
   label: string;
@@ -193,7 +194,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
         value={search}
         onValueChange={setSearch}
         placeholder="Search YouTrack tickets..."
-        className="h-12 w-full border-none bg-transparent px-4 py-3 text-lg outline-none"
+        className={`h-12 w-full border-none ${THEME_TAILWIND.bgSurface} px-4 py-3 text-lg outline-none ${THEME_TAILWIND.textPrimary}`}
         autoFocus
       />
       <CommandPrimitive.List
@@ -201,9 +202,9 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
         className="max-h-[300px] overflow-y-auto"
       >
         {filteredTickets.length === 0 ? (
-          <CommandPrimitive.Empty>No results found.</CommandPrimitive.Empty>
+          <CommandPrimitive.Empty className={THEME_TAILWIND.textSecondary}>No results found.</CommandPrimitive.Empty>
         ) : (
-          <div className="text-xs text-gray-500 px-4 py-2">
+          <div className={`text-xs ${THEME_TAILWIND.textSecondary} px-4 py-2`}>
             Showing {filteredTickets.length} result{filteredTickets.length !== 1 ? "s" : ""}
           </div>
         )}
@@ -213,39 +214,32 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
             ref={index === selectedIndex ? selectedItemRef : null}
             onClick={() => handleTicketSelect(ticket)}
             className={cn(
-              "flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
+              `flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors border-l-3 border-l-transparent`,
               index === selectedIndex
-                ? "bg-accent text-accent-foreground"
-                : "hover:bg-accent hover:bg-opacity-50"
+                ? `bg-[hsl(var(--color-bg-hover))] border-l-[hsl(var(--color-accent-bright))]`
+                : `hover:bg-[hsl(var(--color-bg-hover))]`
             )}
           >
-            <div className="flex flex-col flex-grow group">
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-blue-400 w-24 flex-shrink-0">
+            <div className={`flex flex-col flex-grow group ${THEME_TAILWIND.textPrimary}`}>
+              <div className="flex justify-between items-center gap-3">
+                <span className={`font-bold ${THEME_TAILWIND.accent} w-24 flex-shrink-0`}>
                   {ticket.id}
                 </span>
-                <span className="flex-grow truncate text-white">
+                <span className={`flex-grow truncate ${THEME_TAILWIND.textPrimary}`}>
                   {ticket.summary}
                 </span>
-                <span
-                  className={cn(
-                    "ml-4 text-right flex-shrink-0",
-                    ticket.priority === "Critical" && "text-red-500",
-                    ticket.priority === "Major" && "text-yellow-500",
-                    ticket.priority === "Minor" && "text-gray-500"
-                  )}
-                >
+                <span className={`ml-4 text-right flex-shrink-0 ${PRIORITY_TAILWIND[ticket.priority] || PRIORITY_TAILWIND['']}`}>
                   {ticket.priority}
                 </span>
               </div>
-              <div className="flex justify-between items-center text-sm text-gray-400">
-                <span className="text-gray-500">{ticket.type}</span>
+              <div className={`flex justify-between items-center text-sm ${THEME_TAILWIND.textSecondary}`}>
+                <span>{ticket.type}</span>
                 <div className="flex space-x-1">
                   {ticket.sprints && ticket.sprints.length > 0
                     ? ticket.sprints.map((sprint: string) => (
                         <span
                           key={sprint}
-                          className="px-2 py-0.5 border border-gray-500 rounded-full text-xs"
+                          className={`px-2 py-0.5 border border-[hsl(var(--color-border))] rounded-full text-xs ${THEME_TAILWIND.textSecondary}`}
                         >
                           {sprint}
                         </span>
@@ -316,24 +310,24 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gray-900 flex flex-col">
-      <h1 className="text-2xl font-bold mb-4">Setup Wizard</h1>
-      {error && <p className="text-red-500 mb-4 p-3 bg-red-900 rounded">{error}</p>}
+    <div className={`min-h-screen p-8 ${THEME_TAILWIND.bgBase} flex flex-col`}>
+      <h1 className={`text-2xl font-bold mb-4 ${THEME_TAILWIND.textPrimary}`}>Setup Wizard</h1>
+      {error && <p className={`text-[hsl(var(--color-critical))] mb-4 p-3 bg-[hsl(var(--color-critical)_/_10%)] rounded`}>{error}</p>}
 
       {step === 1 && (
         <div className="flex-1 flex flex-col max-w-md">
-          <h2 className="text-xl mb-4">Step 1: YouTrack Configuration</h2>
+          <h2 className={`text-xl mb-4 ${THEME_TAILWIND.textPrimary}`}>Step 1: YouTrack Configuration</h2>
           <input
             type="text"
             placeholder="YouTrack Base URL (e.g., https://myorg.youtrack.cloud)"
-            className="w-full p-3 mb-3 bg-gray-700 rounded text-white"
+            className={`w-full p-3 mb-3 ${THEME_TAILWIND.bgSurface} rounded ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
             value={baseURL}
             onChange={(e) => setBaseURL(e.target.value)}
           />
           <input
             type="password"
             placeholder="Permanent Token"
-            className="w-full p-3 mb-4 bg-gray-700 rounded text-white"
+            className={`w-full p-3 mb-4 ${THEME_TAILWIND.bgSurface} rounded ${THEME_TAILWIND.textPrimary} placeholder-[hsl(var(--color-text-muted))]`}
             value={token}
             onChange={(e) => setToken(e.target.value)}
           />
@@ -343,19 +337,19 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
 
       {step === 2 && (
         <div className="flex-1 flex flex-col">
-          <h2 className="text-xl mb-4">Step 2: Project Selection</h2>
-          <div className="mb-4 p-3 bg-gray-700 rounded text-sm">
+          <h2 className={`text-xl mb-4 ${THEME_TAILWIND.textPrimary}`}>Step 2: Project Selection</h2>
+          <div className={`mb-4 p-3 ${THEME_TAILWIND.bgSurface} rounded text-sm ${THEME_TAILWIND.textSecondary}`}>
             {selectedProjects.length === 0
               ? 'No projects selected'
               : `${selectedProjects.length} project(s) selected: ${selectedProjects.join(', ')}`}
           </div>
-          <div className="bg-gray-700 rounded p-4 mb-4 overflow-y-auto max-h-64 flex-1">
+          <div className={`${THEME_TAILWIND.bgSurface} rounded p-4 mb-4 overflow-y-auto max-h-64 flex-1`}>
             {projects.length === 0 ? (
-              <p className="text-gray-400">No projects available</p>
+              <p className={THEME_TAILWIND.textSecondary}>No projects available</p>
             ) : (
               <div className="space-y-2">
                 {projects.map((project) => (
-                  <label key={project} className="flex items-center cursor-pointer">
+                  <label key={project} className={`flex items-center cursor-pointer ${THEME_TAILWIND.textPrimary}`}>
                     <input
                       type="checkbox"
                       checked={selectedProjects.includes(project)}
@@ -382,8 +376,8 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
 
       {step === 3 && (
         <div className="flex-1 flex flex-col">
-          <h2 className="text-xl mb-4">Step 3: Window Position</h2>
-          <div className="bg-gray-700 rounded p-4 mb-4 flex-1">
+          <h2 className={`text-xl mb-4 ${THEME_TAILWIND.textPrimary}`}>Step 3: Window Position</h2>
+          <div className={`${THEME_TAILWIND.bgSurface} rounded p-4 mb-4 flex-1`}>
             <div className="space-y-3">
               {[
                 { label: 'Top Left', value: 'Top Left' },
@@ -394,7 +388,7 @@ function SetupWizard({ setConfig, setIsConfigured }: SetupWizardProps) {
                 { label: 'Bottom Center', value: 'Bottom Center' },
                 { label: 'Bottom Right', value: 'Bottom Right' },
               ].map((pos) => (
-                <label key={pos.value} className="flex items-center cursor-pointer">
+                <label key={pos.value} className={`flex items-center cursor-pointer ${THEME_TAILWIND.textPrimary}`}>
                   <input
                     type="radio"
                     name="windowPos"
@@ -421,7 +415,7 @@ const CommandMenu = React.forwardRef<React.ElementRef<typeof CommandPrimitive>, 
     <CommandPrimitive
       ref={ref}
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+        `flex h-full w-full flex-col overflow-hidden rounded-md ${THEME_TAILWIND.bgElevated}`,
         className
       )}
       {...props}
