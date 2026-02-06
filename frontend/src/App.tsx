@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Search } from 'lucide-react';
 import { main } from 'wailsjs/go/models';
 import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
-import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_TAILWIND } from '@/utils/theme';
+import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_TAILWIND, getPriorityBadgeClass } from '@/utils/theme';
 
 interface WindowPosition {
   label: string;
@@ -244,13 +244,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
                   {/* Priority Badge */}
                   <span className={cn(
                     'inline-block px-2 py-1 rounded text-xs font-medium ml-auto',
-                    ticket.priority === 'Critical' && 'bg-[hsl(var(--color-critical)_/_20%)] text-[hsl(var(--color-critical))]',
-                    ticket.priority === 'High' && 'bg-[hsl(var(--color-high)_/_20%)] text-[hsl(var(--color-high))]',
-                    ticket.priority === 'Major' && 'bg-[hsl(var(--color-major)_/_20%)] text-[hsl(var(--color-major))]',
-                    ticket.priority === 'Normal' && 'bg-[hsl(var(--color-normal)_/_20%)] text-[hsl(var(--color-normal))]',
-                    ticket.priority === 'Medium' && 'bg-[hsl(var(--color-major)_/_20%)] text-[hsl(var(--color-major))]',
-                    ticket.priority === 'Low' && 'bg-[hsl(var(--color-normal)_/_20%)] text-[hsl(var(--color-normal))]',
-                    !ticket.priority && 'bg-[hsl(var(--color-text-secondary)_/_20%)] text-[hsl(var(--color-text-secondary))]'
+                    getPriorityBadgeClass(ticket.priority)
                   )}>
                     {ticket.priority || '—'}
                   </span>

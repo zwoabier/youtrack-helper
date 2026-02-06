@@ -4,46 +4,78 @@
  * This makes the UI easily adjustable by modifying CSS variables
  */
 export const PRIORITY_COLORS = {
-    Critical: 'hsl(var(--color-critical))',
-    High: 'hsl(var(--color-high))',
-    Major: 'hsl(var(--color-major))',
-    Medium: 'hsl(var(--color-major))',
-    Normal: 'hsl(var(--color-normal))',
-    Low: 'hsl(var(--color-normal))',
+    'Show-stopper': 'hsl(var(--color-priority-show-stopper))',
+    Critical: 'hsl(var(--color-priority-critical))',
+    'High-priority': 'hsl(var(--color-priority-high-priority))',
+    Major: 'hsl(var(--color-priority-major))',
+    Normal: 'hsl(var(--color-priority-normal))',
+    Minor: 'hsl(var(--color-priority-minor))',
+    Planning: 'hsl(var(--color-priority-planning))',
     '': 'hsl(var(--color-text-secondary))',
 };
 export const PRIORITY_TAILWIND = {
-    Critical: 'text-[hsl(var(--color-critical))]',
-    High: 'text-[hsl(var(--color-high))]',
-    Major: 'text-[hsl(var(--color-major))]',
-    Medium: 'text-[hsl(var(--color-major))]',
-    Normal: 'text-[hsl(var(--color-normal))]',
-    Low: 'text-[hsl(var(--color-normal))]',
+    'Show-stopper': 'text-[hsl(var(--color-priority-show-stopper))]',
+    Critical: 'text-[hsl(var(--color-priority-critical))]',
+    'High-priority': 'text-[hsl(var(--color-priority-high-priority))]',
+    Major: 'text-[hsl(var(--color-priority-major))]',
+    Normal: 'text-[hsl(var(--color-priority-normal))]',
+    Minor: 'text-[hsl(var(--color-priority-minor))]',
+    Planning: 'text-[hsl(var(--color-priority-planning))]',
     '': 'text-[hsl(var(--color-text-secondary))]',
 };
 // Ticket Type colors and styling
 export const TICKET_TYPE_COLORS = {
-    Bug: 'hsl(var(--color-type-bug))',
-    Feature: 'hsl(var(--color-type-feature))',
+    Task: 'hsl(var(--color-type-task))',
     Epic: 'hsl(var(--color-type-epic))',
+    Feature: 'hsl(var(--color-type-feature))',
     'User Story': 'hsl(var(--color-type-user-story))',
+    'Sub-Task': 'hsl(var(--color-type-sub-task))',
+    Spike: 'hsl(var(--color-type-spike))',
+    NEW: 'hsl(var(--color-type-new))',
+    'Bug (Blocking)': 'hsl(var(--color-type-bug-blocking))',
+    'Bug (Non-blocking)': 'hsl(var(--color-type-bug-non-blocking))',
+    Investigation: 'hsl(var(--color-type-investigation))',
 };
 export const TICKET_TYPE_TAILWIND = {
-    Bug: {
-        bg: 'bg-[hsl(var(--color-type-bug)_/_20%)]',
-        text: 'text-[hsl(var(--color-type-bug))]',
-    },
-    Feature: {
-        bg: 'bg-[hsl(var(--color-type-feature)_/_20%)]',
-        text: 'text-[hsl(var(--color-type-feature))]',
+    Task: {
+        bg: 'bg-[hsl(var(--color-type-task)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-task))]',
     },
     Epic: {
         bg: 'bg-[hsl(var(--color-type-epic)_/_20%)]',
         text: 'text-[hsl(var(--color-type-epic))]',
     },
+    Feature: {
+        bg: 'bg-[hsl(var(--color-type-feature)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-feature))]',
+    },
     'User Story': {
         bg: 'bg-[hsl(var(--color-type-user-story)_/_20%)]',
         text: 'text-[hsl(var(--color-type-user-story))]',
+    },
+    'Sub-Task': {
+        bg: 'bg-[hsl(var(--color-type-sub-task)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-sub-task))]',
+    },
+    Spike: {
+        bg: 'bg-[hsl(var(--color-type-spike)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-spike))]',
+    },
+    NEW: {
+        bg: 'bg-[hsl(var(--color-type-new)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-new))]',
+    },
+    'Bug (Blocking)': {
+        bg: 'bg-[hsl(var(--color-type-bug-blocking)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-bug-blocking))]',
+    },
+    'Bug (Non-blocking)': {
+        bg: 'bg-[hsl(var(--color-type-bug-non-blocking)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-bug-non-blocking))]',
+    },
+    Investigation: {
+        bg: 'bg-[hsl(var(--color-type-investigation)_/_20%)]',
+        text: 'text-[hsl(var(--color-type-investigation))]',
     },
 };
 export const TICKET_TYPE_STYLES = {
@@ -115,4 +147,20 @@ export const THEME_TAILWIND = {
     high: 'text-[hsl(var(--color-high))]',
     major: 'text-[hsl(var(--color-major))]',
     normal: 'text-[hsl(var(--color-normal))]',
+};
+// Helper function to get priority badge classes
+export const getPriorityBadgeClass = (priority) => {
+    if (!priority) {
+        return 'bg-[hsl(var(--color-text-secondary)_/_20%)] text-[hsl(var(--color-text-secondary))]';
+    }
+    const priorityBadgeMap = {
+        'Show-stopper': 'bg-[hsl(var(--color-priority-show-stopper)_/_20%)] text-[hsl(var(--color-priority-show-stopper))]',
+        Critical: 'bg-[hsl(var(--color-priority-critical)_/_20%)] text-[hsl(var(--color-priority-critical))]',
+        'High-priority': 'bg-[hsl(var(--color-priority-high-priority)_/_20%)] text-[hsl(var(--color-priority-high-priority))]',
+        Major: 'bg-[hsl(var(--color-priority-major)_/_20%)] text-[hsl(var(--color-priority-major))]',
+        Normal: 'bg-[hsl(var(--color-priority-normal)_/_20%)] text-[hsl(var(--color-priority-normal))]',
+        Minor: 'bg-[hsl(var(--color-priority-minor)_/_20%)] text-[hsl(var(--color-priority-minor))]',
+        Planning: 'bg-[hsl(var(--color-priority-planning)_/_20%)] text-[hsl(var(--color-priority-planning))]',
+    };
+    return priorityBadgeMap[priority] || 'bg-[hsl(var(--color-text-secondary)_/_20%)] text-[hsl(var(--color-text-secondary))]';
 };

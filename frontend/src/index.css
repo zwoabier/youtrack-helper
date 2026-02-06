@@ -26,16 +26,25 @@
     --color-accent-bright: 204 100% 40%;
     
     /* Priority Colors */
-    --color-critical: 10 86% 70%;
-    --color-high: 27 61% 50%;
-    --color-major: 37 100% 71%;
-    --color-normal: 102 29% 47%;
+    --color-priority-show-stopper: 0 86% 70%;
+    --color-priority-critical: 10 86% 70%;
+    --color-priority-high-priority: 27 61% 50%;
+    --color-priority-major: 37 100% 71%;
+    --color-priority-normal: 102 29% 47%;
+    --color-priority-minor: 204 100% 40%;
+    --color-priority-planning: 240 4% 25%;
     
     /* Ticket Type Colors */
-    --color-type-bug: 10 86% 70%;
-    --color-type-feature: 102 29% 47%;
+    --color-type-task: 204 100% 40%;
     --color-type-epic: 37 100% 71%;
-    --color-type-user-story: 27 61% 50%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-user-story: 200 90% 50%;
+    --color-type-sub-task: 240 4% 25%;
+    --color-type-spike: 260 70% 60%;
+    --color-type-new: 27 100% 60%;
+    --color-type-bug-blocking: 10 86% 70%;
+    --color-type-bug-non-blocking: 27 61% 50%;
+    --color-type-investigation: 280 70% 55%;
     
     /* Card & Component Colors */
     --background: 0 0% 12%;
@@ -78,15 +87,24 @@
     --color-accent: 204 84% 33%;
     --color-accent-bright: 204 100% 40%;
     
-    --color-critical: 10 86% 70%;
-    --color-high: 27 61% 50%;
-    --color-major: 37 100% 71%;
-    --color-normal: 102 29% 47%;
+    --color-priority-show-stopper: 0 86% 70%;
+    --color-priority-critical: 10 86% 70%;
+    --color-priority-high-priority: 27 61% 50%;
+    --color-priority-major: 37 100% 71%;
+    --color-priority-normal: 102 29% 47%;
+    --color-priority-minor: 204 100% 40%;
+    --color-priority-planning: 240 4% 25%;
     
-    --color-type-bug: 10 86% 70%;
-    --color-type-feature: 102 29% 47%;
+    --color-type-task: 204 100% 40%;
     --color-type-epic: 37 100% 71%;
-    --color-type-user-story: 27 61% 50%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-user-story: 200 90% 50%;
+    --color-type-sub-task: 240 4% 25%;
+    --color-type-spike: 260 70% 60%;
+    --color-type-new: 27 100% 60%;
+    --color-type-bug-blocking: 10 86% 70%;
+    --color-type-bug-non-blocking: 27 61% 50%;
+    --color-type-investigation: 280 70% 55%;
     
     --background: 0 0% 12%;
     --foreground: 0 0% 80%;
@@ -128,15 +146,24 @@
     --color-accent: 204 84% 45%;
     --color-accent-bright: 204 100% 40%;
     
-    --color-critical: 0 100% 50%;
-    --color-high: 27 61% 50%;
-    --color-major: 37 100% 55%;
-    --color-normal: 102 29% 47%;
+    --color-priority-show-stopper: 0 100% 50%;
+    --color-priority-critical: 0 100% 50%;
+    --color-priority-high-priority: 27 61% 50%;
+    --color-priority-major: 37 100% 55%;
+    --color-priority-normal: 102 29% 47%;
+    --color-priority-minor: 204 100% 45%;
+    --color-priority-planning: 220 60% 50%;
     
-    --color-type-bug: 0 100% 50%;
-    --color-type-feature: 102 29% 47%;
+    --color-type-task: 204 100% 45%;
     --color-type-epic: 37 100% 55%;
-    --color-type-user-story: 27 61% 50%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-user-story: 200 90% 45%;
+    --color-type-sub-task: 220 60% 50%;
+    --color-type-spike: 260 70% 50%;
+    --color-type-new: 27 100% 55%;
+    --color-type-bug-blocking: 0 100% 50%;
+    --color-type-bug-non-blocking: 27 61% 50%;
+    --color-type-investigation: 280 70% 50%;
     
     --background: 0 0% 100%;
     --foreground: 0 0% 20%;

@@ -1,5 +1,15 @@
 [
   {
+    "id": "AGV-849",
+    "summary": "FE: Lock/unlock error shown for read‑only users",
+    "type": "Bug (Non-blocking)",
+    "priority": "Normal",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-849"
+  },
+  {
     "id": "AGV-932",
     "summary": "BE: Make Dealer Information not required in Bikeshield when creating a claim",
     "type": "User Story",
@@ -2188,16 +2198,6 @@
       "AGV_Sprint_22"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-926"
-  },
-  {
-    "id": "AGV-849",
-    "summary": "Lock/unlock error shown for read‑only users",
-    "type": "Bug (Non-blocking)",
-    "priority": "Normal",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-849"
   },
   {
     "id": "AGV-376",
