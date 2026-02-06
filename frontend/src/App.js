@@ -1,18 +1,8 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useEffect, useState, useRef } from "react";
-import { Command as CommandPrimitive } from "cmdk";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard } from 'wailsjs/go/main/App';
-const WINDOW_POSITIONS = [
-    { label: 'Top Left', value: 'top-left' },
-    { label: 'Top Center', value: 'top-center' },
-    { label: 'Top Right', value: 'top-right' },
-    { label: 'Center', value: 'center' },
-    { label: 'Bottom Left', value: 'bottom-left' },
-    { label: 'Bottom Center', value: 'bottom-center' },
-    { label: 'Bottom Right', value: 'bottom-right' },
-];
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import { GetConfig, GetTickets, SyncTickets } from 'wailsjs/go/main/App';
+import { SetupWizard } from '@/components/SetupWizard';
+import { SearchInterfaceSimple } from '@/components/SearchInterfaceSimple';
 function App() {
     const [config, setConfig] = useState(null);
     const [tickets, setTickets] = useState([]);
@@ -34,194 +24,21 @@ function App() {
         }
         init();
     }, []);
+    // Load tickets when configuration is completed (after setup wizard)
+    useEffect(() => {
+        if (isConfigured && config && config.base_url && config.projects.length > 0) {
+            async function loadtickets() {
+                const cachedTickets = await GetTickets();
+                setTickets(cachedTickets);
+                // Start background sync
+                SyncTickets();
+            }
+            loadtickets();
+        }
+    }, [isConfigured, config]);
     if (!config) {
         return _jsx("div", { children: "Loading..." });
     }
-    return (_jsx("div", { className: "h-screen w-screen overflow-hidden dark", children: isConfigured ? (_jsx(SearchInterface, { tickets: tickets })) : (_jsx(SetupWizard, { setConfig: setConfig, setIsConfigured: setIsConfigured })) }));
+    return (_jsx("div", { className: "h-screen w-screen overflow-hidden dark", children: isConfigured ? (_jsx(SearchInterfaceSimple, { tickets: tickets })) : (_jsx(SetupWizard, { setConfig: setConfig, setIsConfigured: setIsConfigured })) }));
 }
-function SearchInterface({ tickets }) {
-    const [search, setSearch] = useState("");
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const [filteredTickets, setFilteredTickets] = useState([]);
-    const inputRef = useRef(null);
-    const selectedItemRef = useRef(null);
-    const resultsContainerRef = useRef(null);
-    const lastSearchRef = useRef("");
-    // Effect 1: Filter and rank tickets based on search query
-    useEffect(() => {
-        if (search.trim() === "") {
-            // No search: show all tickets
-            setFilteredTickets(tickets);
-        }
-        else {
-            // Calculate relevance scores for each ticket
-            const searchLower = search.toLowerCase();
-            const scored = tickets.map((ticket) => {
-                let score = 0;
-                // ID exact match: 1000 points
-                if (ticket.id.toLowerCase() === searchLower) {
-                    score += 1000;
-                }
-                // ID starts with query: 800 points
-                else if (ticket.id.toLowerCase().startsWith(searchLower)) {
-                    score += 800;
-                }
-                // ID contains query: 600 points
-                else if (ticket.id.toLowerCase().includes(searchLower)) {
-                    score += 600;
-                }
-                // Summary contains query: 400 points
-                if (ticket.summary.toLowerCase().includes(searchLower)) {
-                    score += 400;
-                }
-                // Type contains query: 200 points
-                if (ticket.type && ticket.type.toLowerCase().includes(searchLower)) {
-                    score += 200;
-                }
-                // Priority contains query: 100 points
-                if (ticket.priority && ticket.priority.toLowerCase().includes(searchLower)) {
-                    score += 100;
-                }
-                // Sprints contain query: 100 points
-                if (ticket.sprints && ticket.sprints.some(s => s.toLowerCase().includes(searchLower))) {
-                    score += 100;
-                }
-                return { ticket, score };
-            });
-            // Filter out zero-score results and sort by score descending
-            const filtered = scored
-                .filter(item => item.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .map(item => item.ticket);
-            setFilteredTickets(filtered);
-        }
-    }, [search, tickets]);
-    // Effect 2: Reset selection and scroll to top when search query changes
-    useEffect(() => {
-        if (search !== lastSearchRef.current) {
-            setSelectedIndex(0);
-            // Scroll container to top
-            if (resultsContainerRef.current) {
-                resultsContainerRef.current.scrollTop = 0;
-            }
-            lastSearchRef.current = search;
-        }
-    }, [search]);
-    // Effect 3: Scroll selected item into view
-    useEffect(() => {
-        if (selectedItemRef.current) {
-            selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
-    }, [selectedIndex, filteredTickets]);
-    // Keyboard navigation handler
-    const handleKeyDown = (e) => {
-        if (e.key === "Escape") {
-            if (search === "") {
-                HideWindow();
-            }
-            else {
-                setSearch("");
-            }
-        }
-        else if (e.key === "ArrowDown") {
-            e.preventDefault();
-            setSelectedIndex((prev) => prev < filteredTickets.length - 1 ? prev + 1 : prev);
-        }
-        else if (e.key === "ArrowUp") {
-            e.preventDefault();
-            setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
-        }
-        else if (e.key === "Enter") {
-            e.preventDefault();
-            if (filteredTickets[selectedIndex]) {
-                const ticket = filteredTickets[selectedIndex];
-                const markdownLink = `[${ticket.id}](${ticket.url})`;
-                CopyToClipboard(markdownLink);
-                HideWindow();
-            }
-        }
-    };
-    useEffect(() => {
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [search, filteredTickets, selectedIndex]);
-    const handleTicketSelect = async (ticket) => {
-        const markdownLink = `[${ticket.id}](${ticket.url})`;
-        await CopyToClipboard(markdownLink);
-        HideWindow();
-    };
-    return (_jsxs(CommandMenu, { children: [_jsx(CommandPrimitive.Input, { ref: inputRef, value: search, onValueChange: setSearch, placeholder: "Search YouTrack tickets...", className: "h-12 w-full border-none bg-transparent px-4 py-3 text-lg outline-none", autoFocus: true }), _jsxs(CommandPrimitive.List, { ref: resultsContainerRef, className: "max-h-[300px] overflow-y-auto", children: [filteredTickets.length === 0 ? (_jsx(CommandPrimitive.Empty, { children: "No results found." })) : (_jsxs("div", { className: "text-xs text-gray-500 px-4 py-2", children: ["Showing ", filteredTickets.length, " result", filteredTickets.length !== 1 ? "s" : ""] })), filteredTickets.map((ticket, index) => (_jsx("div", { ref: index === selectedIndex ? selectedItemRef : null, onClick: () => handleTicketSelect(ticket), className: cn("flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors", index === selectedIndex
-                            ? "bg-accent text-accent-foreground"
-                            : "hover:bg-accent hover:bg-opacity-50"), children: _jsxs("div", { className: "flex flex-col flex-grow group", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "font-bold text-blue-400 w-24 flex-shrink-0", children: ticket.id }), _jsx("span", { className: "flex-grow truncate text-white", children: ticket.summary }), _jsx("span", { className: cn("ml-4 text-right flex-shrink-0", ticket.priority === "Critical" && "text-red-500", ticket.priority === "Major" && "text-yellow-500", ticket.priority === "Minor" && "text-gray-500"), children: ticket.priority })] }), _jsxs("div", { className: "flex justify-between items-center text-sm text-gray-400", children: [_jsx("span", { className: "text-gray-500", children: ticket.type }), _jsx("div", { className: "flex space-x-1", children: ticket.sprints && ticket.sprints.length > 0
-                                                ? ticket.sprints.map((sprint) => (_jsx("span", { className: "px-2 py-0.5 border border-gray-500 rounded-full text-xs", children: sprint }, sprint)))
-                                                : null })] })] }) }, ticket.id)))] })] }));
-}
-function SetupWizard({ setConfig, setIsConfigured }) {
-    const [baseURL, setBaseURL] = useState("");
-    const [token, setToken] = useState("");
-    const [step, setStep] = useState(1);
-    const [projects, setProjects] = useState([]);
-    const [selectedProjects, setSelectedProjects] = useState([]);
-    const [windowPos, setWindowPos] = useState("Center");
-    const [error, setError] = useState(null);
-    const handleValidateAndSaveToken = async () => {
-        try {
-            const isValid = await ValidateYouTrackToken(baseURL, token);
-            if (isValid) {
-                await SaveYouTrackToken(token);
-                setStep(2);
-                setError(null);
-                const fetchedProjects = await FetchProjects(baseURL, token);
-                // fetchedProjects is an array of project objects; store shortName values
-                setProjects(fetchedProjects.map((p) => p.shortName));
-            }
-            else {
-                setError("Invalid YouTrack Base URL or Token.");
-            }
-        }
-        catch (e) {
-            const message = typeof e === "string"
-                ? e
-                : e instanceof Error
-                    ? e.message
-                    : e?.message ??
-                        e?.Message ??
-                        (e != null ? String(e) : "Unknown error");
-            setError(message);
-        }
-    };
-    const handleSaveConfig = async () => {
-        const newConfig = {
-            base_url: baseURL,
-            projects: selectedProjects,
-            window_pos: windowPos,
-            last_sync_time: 0,
-            log_level: "info",
-            log_to_file: false,
-        };
-        await SaveConfig(newConfig);
-        setConfig(newConfig);
-        setIsConfigured(true);
-    };
-    return (_jsxs("div", { className: "min-h-screen p-8 bg-gray-900 flex flex-col", children: [_jsx("h1", { className: "text-2xl font-bold mb-4", children: "Setup Wizard" }), error && _jsx("p", { className: "text-red-500 mb-4 p-3 bg-red-900 rounded", children: error }), step === 1 && (_jsxs("div", { className: "flex-1 flex flex-col max-w-md", children: [_jsx("h2", { className: "text-xl mb-4", children: "Step 1: YouTrack Configuration" }), _jsx("input", { type: "text", placeholder: "YouTrack Base URL (e.g., https://myorg.youtrack.cloud)", className: "w-full p-3 mb-3 bg-gray-700 rounded text-white", value: baseURL, onChange: (e) => setBaseURL(e.target.value) }), _jsx("input", { type: "password", placeholder: "Permanent Token", className: "w-full p-3 mb-4 bg-gray-700 rounded text-white", value: token, onChange: (e) => setToken(e.target.value) }), _jsx(Button, { onClick: handleValidateAndSaveToken, children: "Next" })] })), step === 2 && (_jsxs("div", { className: "flex-1 flex flex-col", children: [_jsx("h2", { className: "text-xl mb-4", children: "Step 2: Project Selection" }), _jsx("div", { className: "mb-4 p-3 bg-gray-700 rounded text-sm", children: selectedProjects.length === 0
-                            ? 'No projects selected'
-                            : `${selectedProjects.length} project(s) selected: ${selectedProjects.join(', ')}` }), _jsx("div", { className: "bg-gray-700 rounded p-4 mb-4 overflow-y-auto max-h-64 flex-1", children: projects.length === 0 ? (_jsx("p", { className: "text-gray-400", children: "No projects available" })) : (_jsx("div", { className: "space-y-2", children: projects.map((project) => (_jsxs("label", { className: "flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: selectedProjects.includes(project), onChange: (e) => {
-                                            if (e.target.checked) {
-                                                setSelectedProjects([...selectedProjects, project]);
-                                            }
-                                            else {
-                                                setSelectedProjects(selectedProjects.filter((p) => p !== project));
-                                            }
-                                        }, className: "mr-3" }), _jsx("span", { children: project })] }, project))) })) }), _jsx(Button, { onClick: () => setStep(3), children: "Next" })] })), step === 3 && (_jsxs("div", { className: "flex-1 flex flex-col", children: [_jsx("h2", { className: "text-xl mb-4", children: "Step 3: Window Position" }), _jsx("div", { className: "bg-gray-700 rounded p-4 mb-4 flex-1", children: _jsx("div", { className: "space-y-3", children: [
-                                { label: 'Top Left', value: 'Top Left' },
-                                { label: 'Top Center', value: 'Top Center' },
-                                { label: 'Top Right', value: 'Top Right' },
-                                { label: 'Center', value: 'Center' },
-                                { label: 'Bottom Left', value: 'Bottom Left' },
-                                { label: 'Bottom Center', value: 'Bottom Center' },
-                                { label: 'Bottom Right', value: 'Bottom Right' },
-                            ].map((pos) => (_jsxs("label", { className: "flex items-center cursor-pointer", children: [_jsx("input", { type: "radio", name: "windowPos", checked: windowPos === pos.value, onChange: () => setWindowPos(pos.value), className: "mr-3" }), _jsx("span", { children: pos.label })] }, pos.value))) }) }), _jsx(Button, { onClick: handleSaveConfig, children: "Finish Setup" })] }))] }));
-}
-const CommandMenu = React.forwardRef(({ className, ...props }, ref) => (_jsx(CommandPrimitive, { ref: ref, className: cn("flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground", className), ...props })));
-CommandMenu.displayName = CommandPrimitive.displayName;
 export default App;

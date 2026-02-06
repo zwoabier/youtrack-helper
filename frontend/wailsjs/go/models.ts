@@ -62,6 +62,24 @@ export namespace main {
 	        this.url = source["url"];
 	    }
 	}
+	export class User {
+	    id: string;
+	    name: string;
+	    email: string;
+	    $type: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new User(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.email = source["email"];
+	        this.$type = source["$type"];
+	    }
+	}
 
 }
 

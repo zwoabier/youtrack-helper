@@ -317,6 +317,42 @@ func (yt *YouTrackAPI) ValidateConnection(ctx context.Context, baseURL, token st
 	return nil
 }
 
+// GetCurrentUser fetches the current user information from YouTrack
+func (yt *YouTrackAPI) GetCurrentUser(ctx context.Context, baseURL, token string) (*User, error) {
+	baseURL = normalizeBaseURL(baseURL)
+	apiURL := fmt.Sprintf("%s/api/users/me?fields=id,name,email", baseURL)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
+	if err != nil {
+		logger.Error("GetCurrentUser: failed to create request: %v", err)
+		return nil, fmt.Errorf("Invalid YouTrack URL.")
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := yt.http.Do(req)
+	if err != nil {
+		logger.Error("GetCurrentUser: request failed: %v", err)
+		return nil, fmt.Errorf("Connection failed. Check your network and YouTrack URL.")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		logger.Error("GetCurrentUser: status=%d url=%s body=%s", resp.StatusCode, apiURL, string(body))
+		return nil, fmt.Errorf("%s", userMessageForStatus(resp.StatusCode))
+	}
+
+	var user User
+	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+		logger.Error("GetCurrentUser: decode error: %v", err)
+		return nil, fmt.Errorf("Invalid response from YouTrack. Try again later.")
+	}
+
+	return &user, nil
+}
+
 // GetProjects fetches available projects from YouTrack
 func (yt *YouTrackAPI) GetProjects(ctx context.Context, baseURL, token string) ([]Project, error) {
 	baseURL = normalizeBaseURL(baseURL)

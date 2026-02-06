@@ -256,3 +256,11 @@ func (a *App) GetYouTrackToken() (string, error) {
 func (a *App) FetchProjects(baseURL, token string) ([]Project, error) {
 	return a.ytAPI.GetProjects(a.ctx, baseURL, token)
 }
+
+// GetCurrentUser fetches the current user information from YouTrack
+func (a *App) GetCurrentUser(baseURL, token string) (*User, error) {
+	if baseURL == "" || token == "" {
+		return nil, fmt.Errorf("base URL and token cannot be empty")
+	}
+	return a.ytAPI.GetCurrentUser(a.ctx, baseURL, token)
+}

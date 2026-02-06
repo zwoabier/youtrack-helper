@@ -12,7 +12,7 @@ interface Window {
         ValidateYouTrackToken(baseURL: string, token: string): Promise<boolean>; 
         SaveYouTrackToken(token: string): Promise<void>; 
         GetYouTrackToken(): Promise<string>; 
-        FetchProjects(baseURL: string, token: string): Promise<string[]>; 
+        FetchProjects(baseURL: string, token: string): Promise<Project[]>; 
       }; 
     }; 
   }; 
@@ -33,7 +33,7 @@ declare global {
           ValidateYouTrackToken(baseURL: string, token: string): Promise<boolean>; 
           SaveYouTrackToken(token: string): Promise<void>; 
           GetYouTrackToken(): Promise<string>; 
-          FetchProjects(baseURL: string, token: string): Promise<string[]>; 
+          FetchProjects(baseURL: string, token: string): Promise<Project[]>; 
         }; 
       }; 
     }; 
@@ -50,6 +50,13 @@ interface Config {
   LastSyncTime: number; 
 } 
 
+interface Project {
+  id: string;
+  name: string;
+  shortName: string;
+  archived: boolean;
+}
+
 interface Ticket { 
   ID: string; 
   Summary: string; 
@@ -57,4 +64,4 @@ interface Ticket {
   Priority: string; 
   Sprints: string[]; 
   Url: string; 
-} 
+}

@@ -18,6 +18,10 @@ export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
 
+export function GetCurrentUser(arg1, arg2) {
+  return window['go']['main']['App']['GetCurrentUser'](arg1, arg2);
+}
+
 export function GetTickets() {
   return window['go']['main']['App']['GetTickets']();
 }
