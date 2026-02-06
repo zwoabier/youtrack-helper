@@ -10,6 +10,26 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-932"
   },
   {
+    "id": "AGV-951",
+    "summary": "BE: Claim Reactivation – Manual Process Override Without Restart",
+    "type": "User Story",
+    "priority": "Major",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-951"
+  },
+  {
+    "id": "AGV-906",
+    "summary": "BE: Processed Status based on Last Interaction",
+    "type": "User Story",
+    "priority": "Major",
+    "sprints": [
+      "AGV_Sprint_23"
+    ],
+    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-906"
+  },
+  {
     "id": "AGV-473",
     "summary": "Command \"SEND_JSON\": Set “Reported to ERGO” after JSON email is sent",
     "type": "User Story",
@@ -1087,16 +1107,6 @@
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-945"
   },
   {
-    "id": "AGV-951",
-    "summary": "BE: Claim Reactivation – Manual Process Override Without Restart",
-    "type": "User Story",
-    "priority": "Major",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-951"
-  },
-  {
     "id": "AGV-675",
     "summary": "BE: Improve history log readability ",
     "type": "User Story",
@@ -1777,16 +1787,6 @@
       "AGV_Sprint_23"
     ],
     "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-953"
-  },
-  {
-    "id": "AGV-906",
-    "summary": "BE: Processed Status based on Last Interaction",
-    "type": "User Story",
-    "priority": "Major",
-    "sprints": [
-      "AGV_Sprint_23"
-    ],
-    "url": "https://entwicklung-bikeleasing.myjetbrains.com/youtrack/issues/AGV-906"
   },
   {
     "id": "AGV-922",

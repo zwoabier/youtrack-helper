@@ -10,6 +10,7 @@
     --color-bg-surface: 240 2% 15%;
     --color-bg-hover: 240 4% 25%;
     --color-bg-active: 204 85% 24%;
+    --color-bg-selected: 240 20% 18%;
     
     /* Text Colors */
     --color-text-primary: 0 0% 80%;
@@ -24,11 +25,17 @@
     --color-accent: 204 84% 33%;
     --color-accent-bright: 204 100% 40%;
     
-    /* Priority/Type Badge Colors */
+    /* Priority Colors */
     --color-critical: 10 86% 70%;
     --color-high: 27 61% 50%;
     --color-major: 37 100% 71%;
     --color-normal: 102 29% 47%;
+    
+    /* Ticket Type Colors */
+    --color-type-bug: 10 86% 70%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-epic: 37 100% 71%;
+    --color-type-user-story: 27 61% 50%;
     
     /* Card & Component Colors */
     --background: 0 0% 12%;
@@ -59,6 +66,7 @@
     --color-bg-surface: 240 2% 15%;
     --color-bg-hover: 240 4% 25%;
     --color-bg-active: 204 85% 24%;
+    --color-bg-selected: 240 20% 18%;
     
     --color-text-primary: 0 0% 80%;
     --color-text-secondary: 0 0% 52%;
@@ -74,6 +82,11 @@
     --color-high: 27 61% 50%;
     --color-major: 37 100% 71%;
     --color-normal: 102 29% 47%;
+    
+    --color-type-bug: 10 86% 70%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-epic: 37 100% 71%;
+    --color-type-user-story: 27 61% 50%;
     
     --background: 0 0% 12%;
     --foreground: 0 0% 80%;
@@ -103,6 +116,7 @@
     --color-bg-surface: 0 0% 95%;
     --color-bg-hover: 0 0% 90%;
     --color-bg-active: 204 100% 90%;
+    --color-bg-selected: 204 100% 85%;
     
     --color-text-primary: 0 0% 20%;
     --color-text-secondary: 0 0% 48%;
@@ -118,6 +132,11 @@
     --color-high: 27 61% 50%;
     --color-major: 37 100% 55%;
     --color-normal: 102 29% 47%;
+    
+    --color-type-bug: 0 100% 50%;
+    --color-type-feature: 102 29% 47%;
+    --color-type-epic: 37 100% 55%;
+    --color-type-user-story: 27 61% 50%;
     
     --background: 0 0% 100%;
     --foreground: 0 0% 20%;

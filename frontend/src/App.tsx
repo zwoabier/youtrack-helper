@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Search } from 'lucide-react';
 import { main } from 'wailsjs/go/models';
 import { GetConfig, GetTickets, SyncTickets, HideWindow, ValidateYouTrackToken, SaveYouTrackToken, FetchProjects, SaveConfig, CopyToClipboard, OpenInBrowser } from 'wailsjs/go/main/App';
-import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_STYLES } from '@/utils/theme';
+import { THEME_TAILWIND, PRIORITY_TAILWIND, TICKET_TYPE_TAILWIND } from '@/utils/theme';
 
 interface WindowPosition {
   label: string;
@@ -221,7 +221,7 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
                 className={cn(
                   `px-4 py-3 cursor-pointer transition-colors border-l-3 border-l-transparent`,
                   index === selectedIndex
-                    ? `${THEME_TAILWIND.bgHover} border-l-[hsl(var(--color-accent-bright))]`
+                    ? `${THEME_TAILWIND.bgSelected} border-l-[hsl(var(--color-accent-bright))]`
                     : `hover:${THEME_TAILWIND.bgHover}`
                 )}
               >
@@ -231,8 +231,13 @@ function SearchInterface({ tickets }: SearchInterfaceProps) {
                     {ticket.id}
                   </span>
                   
-                  {/* Type Badge */}
-                  <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-[hsl(var(--color-accent)_/_20%)] text-[hsl(var(--color-accent-bright))]">
+                  {/* Type Badge - Color-coded by type */}
+                  <span className={cn(
+                    'inline-block px-2 py-1 rounded text-xs font-medium',
+                    ticket.type && TICKET_TYPE_TAILWIND[ticket.type]
+                      ? `${TICKET_TYPE_TAILWIND[ticket.type]?.bg} ${TICKET_TYPE_TAILWIND[ticket.type]?.text}`
+                      : 'bg-[hsl(var(--color-text-secondary)_/_20%)] text-[hsl(var(--color-text-secondary))]'
+                  )}>
                     {ticket.type || 'Unknown'}
                   </span>
 

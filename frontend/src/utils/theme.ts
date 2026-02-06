@@ -24,6 +24,33 @@ export const PRIORITY_TAILWIND: Record<string, string> = {
   '': 'text-[hsl(var(--color-text-secondary))]',
 }
 
+// Ticket Type colors and styling
+export const TICKET_TYPE_COLORS: Record<string, string> = {
+  Bug: 'hsl(var(--color-type-bug))',
+  Feature: 'hsl(var(--color-type-feature))',
+  Epic: 'hsl(var(--color-type-epic))',
+  'User Story': 'hsl(var(--color-type-user-story))',
+}
+
+export const TICKET_TYPE_TAILWIND: Record<string, { bg: string; text: string }> = {
+  Bug: {
+    bg: 'bg-[hsl(var(--color-type-bug)_/_20%)]',
+    text: 'text-[hsl(var(--color-type-bug))]',
+  },
+  Feature: {
+    bg: 'bg-[hsl(var(--color-type-feature)_/_20%)]',
+    text: 'text-[hsl(var(--color-type-feature))]',
+  },
+  Epic: {
+    bg: 'bg-[hsl(var(--color-type-epic)_/_20%)]',
+    text: 'text-[hsl(var(--color-type-epic))]',
+  },
+  'User Story': {
+    bg: 'bg-[hsl(var(--color-type-user-story)_/_20%)]',
+    text: 'text-[hsl(var(--color-type-user-story))]',
+  },
+}
+
 export const TICKET_TYPE_STYLES: Record<string, { bg: string; text: string }> = {
   Bug: {
     bg: 'bg-[hsl(10_86%_70%_/_15%)]',
@@ -50,6 +77,7 @@ export const THEME_COLORS = {
   bgSurface: 'hsl(var(--color-bg-surface))',
   bgHover: 'hsl(var(--color-bg-hover))',
   bgActive: 'hsl(var(--color-bg-active))',
+  bgSelected: 'hsl(var(--color-bg-selected))',
 
   // Text
   textPrimary: 'hsl(var(--color-text-primary))',
@@ -78,6 +106,7 @@ export const THEME_TAILWIND = {
   bgSurface: 'bg-[hsl(var(--color-bg-surface))]',
   bgHover: 'bg-[hsl(var(--color-bg-hover))]',
   bgActive: 'bg-[hsl(var(--color-bg-active))]',
+  bgSelected: 'bg-[hsl(var(--color-bg-selected))]',
 
   // Text
   textPrimary: 'text-[hsl(var(--color-text-primary))]',
