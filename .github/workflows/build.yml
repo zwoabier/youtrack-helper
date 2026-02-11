@@ -39,7 +39,7 @@ jobs:
         working-directory: ./frontend
  
       - name: Build Windows
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform windows/amd64 --skipfrontend
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform windows/amd64 -s
  
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v4
@@ -72,7 +72,7 @@ jobs:
         working-directory: ./frontend
  
       - name: Build macOS
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform darwin/universal --skipfrontend
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform darwin/universal -s
  
       - name: Upload artifact (macOS)
         uses: actions/upload-artifact@v4
@@ -117,7 +117,7 @@ jobs:
         working-directory: ./frontend
  
       - name: Build Linux (AppImage)
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform linux/amd64 -o "youtrack-spotlight.AppImage" --compiler="/usr/bin/gcc" --upx --ldflags "-s -w" --tags="appimage,webkit2_41" --skipfrontend
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest && wails build -platform linux/amd64 -o "youtrack-spotlight.AppImage" --compiler="/usr/bin/gcc" --upx --ldflags "-s -w" --tags="appimage,webkit2_41" -s
         env:
           # Required for AppImage build to find FUSE and other dependencies
           LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu
